@@ -1,0 +1,19 @@
+Database Table structor
+
+
+admin;
+
+suppliers:
+
+suppliers_products;
+
+store_products;
+
+
+
+customers;
+
+
+products_ordered; -> cid, spid, quantity
+
+final_order_table

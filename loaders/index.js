@@ -1,11 +1,12 @@
 const expressLoader = require('./express');
+const routeLoader = require('../routes'); //do routes
 
 module.exports = async (app) => {
 
     await expressLoader(app);
 
 
-
+    routeLoader(app);
 
 
     // Error Handler
