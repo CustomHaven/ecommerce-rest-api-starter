@@ -1,32 +1,25 @@
 const createError = require('http-errors');
-// const DealerModel = require('../models/DealerModel');
 const CrudModel = require('../models/CrudModel');
 const CrudModelInstance = new CrudModel();
 
 module.exports = class DealerService {
 
-    async addDealer(col, tableName) {
+    async allDealers(tableName) {
         try {
-            // console.log(col)
-            // console.log(tableName)
-            const dealer = await CrudModelInstance.newRow(col, tableName);
-            console.log(dealer)
-            if (!dealer) {
-                throw createError(500, 'Supplier could not be added')
-            }
-            return dealer;
+            const results = await CrudModelInstance.getAll(tableName);
+            return results;
         } catch(err) {
             throw err;
         }
     }
 
-    async allDealers(tableName) {
+    async addDealer(col, tableName) {
         try {
-
-            const results = await CrudModelInstance.getAll(tableName);
-
-            return results;
-
+            const dealer = await CrudModelInstance.newRow(col, tableName);
+            if (!dealer) {
+                throw createError(500, 'Supplier could not be added')
+            }
+            return dealer;
         } catch(err) {
             throw err;
         }
@@ -51,7 +44,7 @@ module.exports = class DealerService {
         try {
             const dealer = await CrudModelInstance.findOne(id, tableName, idName);
             if (!dealer) {
-                throw createError(404, 'Supplier not found'); // why is this throw error coming up for deleteRow
+                throw createError(404, 'Supplier not found');
             }
 
             return dealer;
@@ -128,20 +121,46 @@ module.exports = class DealerService {
         }
     }
 
-    async deleteProduct(tableName, fKeyObj, product) {
+    async addProduct(col, tableName) {
         try {
-
-            const results = await CrudModelInstance.getAll(tableName);
-            const dealersProducts = results.filter(deal => deal.dealers_did === fKeyObj?.dealers_did);
-
-            const single = dealersProducts.find(pro => (pro.dpid === product.dpid) && (pro.dealers_did === fKeyObj.dealers_did))
-            
-            if (single === undefined) {
-                throw createError(404, 'No such product in record');
+            const newProduct = await CrudModelInstance.newRow(col, tableName)
+    
+            if (!newProduct) {
+                throw createError(404, 'Could not make the new product');
             }
-            
-            const deleting = CrudModelInstance.deleteRow(single.dpid, 'dealer_products', 'dpid');
+    
+            return newProduct;
+        } catch(err) {
+            throw err;
+        }
+    }
 
+    async updateProduct(id, col, tableName, idName, fKeyObj) {
+        try {
+            
+            if (fKeyObj.dpid !== id) {
+                return null;
+            }
+        
+            const customer = await CrudModelInstance.updateRow(id, col, tableName, idName);
+
+            if (!customer) {
+                throw createError(404, 'Customer not found so we cannot update what is not found in the Database');
+            }
+
+            return customer;
+            
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    async deleteProduct(id, tableName, idName) {
+        try {
+            const deleting = CrudModelInstance.deleteRow(id, tableName, idName);
+            if (!deleting) {
+                throw createError(500, 'No product in record')
+            }
             return deleting;
                         
         } catch(err) {

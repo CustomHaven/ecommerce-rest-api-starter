@@ -37,8 +37,6 @@ module.exports = class CrudModel {
     }
     async newRow(col, tableName) {
         try {
-            // console.log(col)
-            // console.log(tableName)
             const sqlQuery = createHelper(col, tableName);
             console.log(sqlQuery);
             const colValues = Object.values(col);
@@ -71,8 +69,8 @@ module.exports = class CrudModel {
         try {
             const result = await db.query(`DELETE FROM ${tableName}
                                     WHERE ${idName} = $1`, [id]);
-                
-            if (result?.rowCount === 1) {
+
+            if (result?.rowCount >= 1) {
                 return result.rowCount;
             }
             return null
@@ -80,12 +78,13 @@ module.exports = class CrudModel {
             throw new Error(err);
         }
     }
+
     //// BASED ON FKEY SECTIONS!
     async fetchName(str, tableName, colName) {
         try {
             const result = await db.query(`SELECT * FROM ${tableName} 
                                         WHERE ${colName} = $1`, [str]);
-            // console.log(result)
+
             if (result?.rows?.length) {
                 return result?.rows[0];
             }
@@ -95,19 +94,8 @@ module.exports = class CrudModel {
             throw err
         }
     }
-    async getAllBasedOnFkey(tableName, fKeyObj) {
-        try {
-            const result = await db.query(`SELECT * FROM ${tableName}`, [])
 
-            if (result?.rows?.length) {
-                return result?.rows
-            } 
-            return null
-        } catch(err) {
-            throw err
-        }
-    }
-    async findByUsername(name, tableName) { // carry on from here me requset based on name
+    async findByUsername(name, tableName) {
         try {
             const result = await db.query(`SELECT * FROM ${tableName} WHERE name = $1`, [name])
 
@@ -121,12 +109,18 @@ module.exports = class CrudModel {
             throw err
         }
     }
-    async updateBasedOnFkey(fKeyTable) {
-        // this.fKeys = await db.query(`SELECT COUNT(*) FROM ${fKeyTable}`, [])
 
-        // console.log(this.fKeys)
-    }
-    async createBasedOnFkey() {
-
+    async deleteBasedOnFKey(fKeyid, tableName, fKeyIdName) {
+        try {
+            const result = await db.query(`DELETE FROM ${tableName}
+                                    WHERE ${fKeyIdName} = $1`, [fKeyid]);
+                
+            if (result?.rowCount >= 1) {
+                return result.rowCount;
+            }
+            return null
+        } catch(err) {
+            throw new Error(err);
+        }
     }
 }

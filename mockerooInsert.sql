@@ -62,4 +62,4 @@ ALTER COLUMN price TYPE NUMERIC;
 
 
 
-INSERT INTO dealer_products (dealers_did, product_name, type, description, price, quantity) VALUES (5, 'Baked Beans', 'Food', 'Many beautiful exotic beans', 1.99, 1203);
+INSERT INTO dealer_products (dealers_did, product_name, type, description, price, quantity) VALUES (29, 'Baked Beans', 'Food', 'Many beautiful exotic beans', 1.99, 1203);
