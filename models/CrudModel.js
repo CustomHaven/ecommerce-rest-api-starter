@@ -11,8 +11,7 @@ module.exports = class CrudModel {
     }
     async getAll(tableName) {
         try {
-            const result = await db.query(`SELECT * FROM ${tableName}`, [])
-
+            const result = await db.query(`SELECT * FROM ${tableName}`)
             if (result?.rows?.length) {
                 return result?.rows
             } 
@@ -38,9 +37,9 @@ module.exports = class CrudModel {
     async newRow(col, tableName) {
         try {
             const sqlQuery = createHelper(col, tableName);
-            console.log(sqlQuery);
+            // console.log(sqlQuery);
             const colValues = Object.values(col);
-            console.log(colValues)
+            // console.log(colValues)
             const result = await db.query(sqlQuery, colValues);
 
             if (result.rows?.length > 0) {
