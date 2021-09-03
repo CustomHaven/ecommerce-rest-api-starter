@@ -1,17 +1,16 @@
 Database Table structor
 
+admin; - to do
 
-admin;
+suppliers: done
 
-suppliers:
+suppliers_products; done
 
-suppliers_products;
+store_products; done
 
-store_products;
+users - make account if they become a customer then we send them to the customers table
 
-
-
-customers;
+customers - redo first make the users
 
 
 products_ordered; -> cid, spid, quantity

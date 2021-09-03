@@ -44,4 +44,49 @@ module.exports = class ProductService {
             throw err;
         }
     }
+
+    async oneProduct(id, tableName, idName) {
+        try {
+            const product = await CrudModelInstance.findOne(id, tableName, idName);
+            if (!product) {
+                throw createError(404, 'Product not found');
+            }
+
+            return product;
+            
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    async updateProduct(id, col, tableName, idName) {
+        try {
+            const customer = await CrudModelInstance.updateRow(id, col, tableName, idName);
+
+            if (!customer) {
+                throw createError(404, 'Product could not be updated');
+            }
+
+            return customer;
+            
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    async removeProduct(id, tableName, idName) {
+        try {
+
+            const deleteDealer = await CrudModelInstance.deleteRow(id, tableName, idName);
+
+            if (deleteDealer === null) {
+                throw createError(404, 'Product could not be deleted');
+            }
+            return deleteDealer;
+
+        } catch(err) {
+            throw err;
+        }
+        
+    }
 }

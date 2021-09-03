@@ -33,4 +33,35 @@ module.exports = (app) => {
             res.status(500).send(err);
         }
     });
+
+    productRouter.get('/:productId', async (req, res) => {
+        try {
+           const { productId } = req.params;
+           console.log(Number(productId))
+           const product = await ProductServiceInstance.oneProduct(Number(productId), 'store_products', 'spid');
+           res.status(200).send(product);
+        } catch(err) {
+            res.status(404).send(err)
+        }
+    })
+
+    productRouter.put('/:productId', async (req, res) => {
+        try {
+            const id = Number(req.params.productId)
+            const updatedProduct = await ProductServiceInstance.updateProduct(id, req.body, 'store_products', 'spid');
+            res.status(201).send(updatedProduct);
+        } catch(err) {
+            res.status(404).send(err)
+        }
+    })
+
+    productRouter.delete('/:dealerId', async (req, res) => {
+        try {
+           const id = Number(req.params.dealerId);
+           await ProductServiceInstance.removeProduct(id, 'store_products', 'spid');
+           res.sendStatus(204);
+        } catch(err) {
+            res.status(404).send(err)
+        }
+    })
 }

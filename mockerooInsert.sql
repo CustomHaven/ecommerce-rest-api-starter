@@ -53,13 +53,63 @@ SELECT
 FROM
   information_schema.columns
 WHERE
-  table_name IN ('dealer_products');
+  table_name IN ('orders');
 
+
+ALTER TABLE orders
+ALTER COLUMN created_at TYPE timestamp; 
 
 ALTER TABLE store_products
 ALTER COLUMN price TYPE NUMERIC;
 
+ALTER TABLE order_list
+ALTER COLUMN order_date 
+SET DEFAULT date_trunc(timestamp(0));
 
+UPDATE order_list SET order_date = DATE_TRUNC('second', NOW());
 
+ALTER TABLE order_list
+ALTER COLUMN order_date 
+SET DEFAULT DATE_TRUNC('second', NOW());
+
+ALTER TABLE order_list
+ALTER COLUMN order_date 
+SET DEFAULT TIMESTAMP(0) CURRENT_TIMESTAMP;
+
+ALTER TABLE order_list
+ALTER COLUMN order_date 
+SET order_date = DEFAULT date_trunc('second', current_timestamp);
+::timestamp(0)
+ts 
+
+--  this worked we are cutting off the miliseconds
+ALTER TABLE order_list
+ALTER COLUMN order_date TYPE timestamp(0) USING order_date::timestamp(0);
+
+SELECT * FROM order_list
+WHERE order_date > '2021-09-02 23:25:30' AND order_date < '2021-09-02 23:25:50';
 
 INSERT INTO dealer_products (dealers_did, product_name, type, description, price, quantity) VALUES (29, 'Baked Beans', 'Food', 'Many beautiful exotic beans', 1.99, 1203);
+
+ordered_items_pkey
+customers_cid
+ordered_items_pkey
+store_products_spid
+
+
+SELECT constraint_name, table_name, column_name
+FROM information_schema.key_column_usage
+WHERE table_name IN ('store_products', 'ordered_items', 'customers', 'orders');
+             constraint_name             |   table_name   |     column_name
+-----------------------------------------+----------------+---------------------
+ store_products_pkey                     | store_products | spid
+ store_products_dealer_product_dpid_fkey | store_products | dealer_product_dpid
+ customers_pkey                          | customers      | cid
+ ordered_items_customers_cid_fkey        | ordered_items  | customers_cid
+ ordered_items_pkey                      | ordered_items  | customers_cid
+ ordered_items_store_products_spid_fkey  | ordered_items  | store_products_spid
+ ordered_items_pkey                      | ordered_items  | store_products_spid
+ orders_pkey                             | orders         | oid
+ orders_customers_cid_fkey               | orders         | customers_cid
+(9 rows)
+

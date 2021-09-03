@@ -55,8 +55,8 @@ const { DB } = require('./config');
         );
     `
 
-    const ordered_items = `
-        CREATE TABLE IF NOT EXISTS ordered_items (
+    const order_list = `
+        CREATE TABLE IF NOT EXISTS order_list (
             customers_cid integer REFERENCES customers (cid),
             store_products_spid integer REFERENCES store_products (spid),
             PRIMARY KEY (customers_cid, store_products_spid),
