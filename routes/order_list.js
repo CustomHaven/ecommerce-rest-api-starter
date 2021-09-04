@@ -44,22 +44,33 @@ module.exports = (app) => {
             res.status(404).send(err)
         }
     });
+
+    orderListRouter.delete('/:date', async (req, res) => {
+      try {
+        await OLServiceInstance.deleteList(req.params.date, 'order_list', 'order_date');
+        res.sendStatus(204)
+      } catch(err) {
+          res.status(404).send(err);
+      }
+    });
+
+    orderListRouter.get('/:customerId/:date', async (req, res) => {
+      try {
+        console.log("is it working?!")
+        const objHolder = {
+          id: Number(req.params.customerId),
+          date: req.params.date
+        }
+        console.log(objHolder.id)
+        console.log(typeof objHolder.id)
+        console.log(objHolder.date)
+        console.log(typeof objHolder.date)
+        console.log('wtf')
+        const result = await OLServiceInstance.getCustomerDate(objHolder, 'order_list', 'customers_cid', 'order_date');
+        res.status(200).send(result);
+      } catch(err) {
+          res.status(404).send(err);
+      }
+    });
+
 }
-
-/*
-    const ordered_items = `
-        CREATE TABLE IF NOT EXISTS ordered_items (
-            customers_cid integer REFERENCES customers (cid),
-            store_products_spid integer REFERENCES store_products (spid),
-            PRIMARY KEY (customers_cid, store_products_spid),
-            quantity integer,
-            order_date date
-        );
-    `
-*/
-
-/* DO THIS WHEN THE FRONT END IS READY!!! OR DO IT NOW
-Plan hmmm save the cart items in an array of objects then 
-we send them to a special CrudModel where it loops over the content
-of the array of object and does the create a newRow for every ordered_items
-*/

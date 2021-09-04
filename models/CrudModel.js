@@ -144,6 +144,26 @@ module.exports = class CrudModel {
         }
     }
 
+    async getCustomerByDate(objHolder, tableName, colCustomer, colDate) {
+        try {
+            
+            const { id, upperBound, lowerBound } = objHolder;
+
+            const result = await db.query(`SELECT * FROM ${tableName} 
+                                        WHERE ${colCustomer} = $1
+                                        AND
+                                        ${colDate} > $2 AND
+                                        ${colDate} < $3`, [id, lowerBound, upperBound]);
+
+            if (result?.rows?.length) {
+                return result?.rows
+            }
+            return null;
+        } catch(err) {
+            throw err
+        }
+    }
+
     // two table joined bit where clause will be based on date
     async newRowArray(colArray, tableName) {
         try {
@@ -169,16 +189,14 @@ module.exports = class CrudModel {
 
     async deleteBasedOnDate(tableName, colName, date) {
         try {
-            const { lower, upper } = date;
-
-            // SELECT * FROM order_list
-            // WHERE order_date > '2021-09-02 23:25:30' AND order_date < '2021-09-02 23:25:50';
+            const { lowerBound, upperBound } = date;
 
             const result = await db.query(`DELETE FROM ${tableName} 
                                         WHERE ${colName} > $1
-                                        AND ${colName} < $2`, [lower, upper]);
+                                        AND ${colName} < $2`, [lowerBound, upperBound]);
+
             if (result?.rowCount >= 1) {
-                return result.rowCount;
+                return result?.rowCount;
             }
             return null
         } catch(err) {
