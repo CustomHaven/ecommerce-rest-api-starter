@@ -1,3 +1,5 @@
+-- THIS FILE IS JUST ME TESTING METHODS MY LITTLE SCRIBBLE NOTE FILE IGNORE THIS!
+
 INSERT INTO store_products 
 VALUES (6, 6, 'Rustic Wooden Wall', 'Storage', 'Hang, Hang and Hang AWAY!!', (SELECT price * 3 FROM supplier_products WHERE id = 6), 995);
 
@@ -49,7 +51,7 @@ SET dealers_did = 4
 WHERE dpid = 1;
 
 SELECT
-  column_name, data_type
+  column_name, data_type, table_name
 FROM
   information_schema.columns
 WHERE
@@ -113,3 +115,111 @@ WHERE table_name IN ('store_products', 'ordered_items', 'customers', 'orders');
  orders_customers_cid_fkey               | orders         | customers_cid
 (9 rows)
 
+
+
+
+
+
+
+
+
+CREATE TABLE store_products (
+    id integer PRIMARY KEY,
+    supplier_products_id integer REFERENCES supplier_products (id),
+    name varchar(100),
+    type varchar(50),
+    description text,
+    price money,
+    quantity integer
+);
+
+CREATE TABLE orders (
+    id integer PRIMARY KEY,
+    customers_id integer REFERENCES customers (id),
+    status_completed boolean,
+    created_at date,
+    final_price money
+);
+
+INSERT INTO orders(id, customers_id, status_completed, created_at, final_price)
+VALUES (1, 1, 
+    true, 
+    (SELECT order_date FROM ordered_items WHERE ordered_items.customers_id = 1 LIMIT 1), 
+    (SELECT SUM(s.price * oi.quantity) FROM ordered_items AS oi, store_products AS s
+    WHERE s.id = oi.store_products_id
+         AND oi.customers_id = 1));
+
+CREATE TABLE customers (
+    id integer PRIMARY KEY,
+    first_name varchar(50),
+    surname varchar(50),
+    country varchar(200),
+    email varchar(100) NOT NULL
+);
+
+CREATE TABLE ordered_items (
+    customers_id integer REFERENCES customers (id),
+    store_products_id integer REFERENCES store_products (id),
+    PRIMARY KEY (customers_id, store_products_id),
+    quantity integer,
+    order_date date
+);
+
+
+
+
+INSERT INTO order_list(customers_cid, store_products_spid, quantity, order_date, price)
+VALUES(2, 5, 3, 'NOW()', (select sum(sp.price * ol.quantity) 
+  from store_products as sp
+  join order_list as ol on ol.store_products_spid = sp.spid
+  where ol.store_products_spid = 5
+    and ol.customers_cid = 2));
+
+SELECT SUM(sp.price * ol.quantity) FROM store_products AS sp, order_list AS ol
+WHERE ol.order_date = '2021-09-03 20:22:33' AND ol.store_products_spid = 6 AND ol.customers_cid = 3
+AND sp.spid = ol.store_products_spid;
+
+UPDATE order_list
+SET price = (SELECT SUM(sp.price * ol.quantity) AS price
+FROM store_products AS sp
+JOIN order_list AS ol
+ON ol.store_products_spid = sp.spid
+WHERE ol.order_date < '2021-09-03 20:22:35'
+AND ol.order_date > '2021-09-03 20:22:30'
+AND ol.store_products_spid = 5 
+AND ol.customers_cid = 3)
+WHERE customers_cid = 3 
+AND store_products_spid = 5
+AND order_date = '2021-09-03 20:22:33';
+
+
+
+
+UPDATE order_list
+SET price = (SELECT SUM(sp.price * ol.quantity) AS price
+FROM store_products AS sp
+JOIN order_list AS ol
+ON ol.store_products_spid = sp.spid
+WHERE ol.order_date = '2021-09-03 20:38:50'
+AND ol.store_products_spid = 4
+AND ol.customers_cid = 3)
+WHERE customers_cid = 3 
+AND store_products_spid = 4
+AND order_date = '2021-09-03 20:38:50';
+
+
+-- 
+SELECT SUM(price) AS final_price FROM order_list
+WHERE order_date = '2021-09-03 20:22:33';
+
+
+
+
+INSERT INTO orders(customers_cid, status_completed, created_at, final_price)
+VALUES(3, True, (SELECT order_date FROM order_list WHERE order_date = '2021-09-03 20:22:33' LIMIT 1),
+(SELECT SUM(order_list.quantity * store_products.price)
+FROM order_list
+JOIN store_products
+ON  order_list.store_products_spid = store_products.spid
+WHERE order_list.order_date = '2021-09-03 20:22:33'
+AND order_list.customers_cid = 3));

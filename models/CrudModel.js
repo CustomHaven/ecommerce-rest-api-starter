@@ -1,9 +1,8 @@
 const db = require('../db');
 const moment = require('moment');
-// const pgp = require('pg-promise')({ capSQL: true });
 const updateHelper = require('../helpers/updateHelper');
 const createHelper = require('../helpers/createHelper');
-const e = require('cors');
+const priceHelper = require('../helpers/priceHelper');
 
 module.exports = class CrudModel {
     constructor(data = {}) {
@@ -13,9 +12,6 @@ module.exports = class CrudModel {
     }
     async getAll(tableName) {
         try {
-            console.log(this.date)
-            console.log(typeof this.date)
-
             const result = await db.query(`SELECT * FROM ${tableName}`)
             if (result?.rows?.length) {
                 return result?.rows
@@ -42,11 +38,8 @@ module.exports = class CrudModel {
     async newRow(col, tableName) {
         try {
             const sqlQuery = createHelper(col, tableName);
-            // console.log(sqlQuery);
             const colValues = Object.values(col);
-            // console.log(colValues)
             const result = await db.query(sqlQuery, colValues);
-            //console.log(result)
             if (result.rows?.length > 0) {
                 return result.rows[0]
             }
@@ -201,6 +194,21 @@ module.exports = class CrudModel {
             return null
         } catch(err) {
             throw err
+        }
+    }
+
+    async selectPrice(obj, table1, table2, colname, columns) {
+        try {
+            const price = priceHelper(obj, table1, table2, colname)
+            const colValues = Object.values(columns)
+            const result = await db.query(price, colValues);
+            if (result?.rows?.length) {
+                return result?.rows
+            } 
+
+            return null;
+        } catch(err) {
+            throw err;
         }
     }
 }

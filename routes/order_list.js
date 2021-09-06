@@ -21,7 +21,7 @@ module.exports = (app) => {
         try {
 
             const arrayObject = [
-                {
+                {// might need a 4 key for price from the ui client
                     customers_cid: 3,
                     store_products_spid: 6,
                     quantity: 3
@@ -56,16 +56,11 @@ module.exports = (app) => {
 
     orderListRouter.get('/:customerId/:date', async (req, res) => {
       try {
-        console.log("is it working?!")
         const objHolder = {
           id: Number(req.params.customerId),
           date: req.params.date
         }
-        console.log(objHolder.id)
-        console.log(typeof objHolder.id)
-        console.log(objHolder.date)
-        console.log(typeof objHolder.date)
-        console.log('wtf')
+
         const result = await OLServiceInstance.getCustomerDate(objHolder, 'order_list', 'customers_cid', 'order_date');
         res.status(200).send(result);
       } catch(err) {
@@ -74,3 +69,29 @@ module.exports = (app) => {
     });
 
 }
+
+
+
+// const arrayObject = [
+//     {
+//         customers_cid: 3,
+//         store_products_spid: 6,
+//         quantity: 3,
+//         order_date: '2021-09-03 20:22:33',
+//         spid: this.store_products_spid,
+//     },
+//     {
+//         customers_cid: 3,
+//         store_products_spid: 5,
+//         quantity: 3,
+//         order_date: '2021-09-03 20:22:33',
+//         spid: this.store_products_spid,
+//     },
+//     {
+//         customers_cid: 3,
+//         store_products_spid: 4,
+//         quantity: 2,
+//         order_date: '2021-09-03 20:22:33',
+//         spid: this.store_products_spid,
+//     }
+// ]
