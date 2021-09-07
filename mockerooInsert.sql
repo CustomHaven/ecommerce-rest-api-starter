@@ -213,7 +213,7 @@ SELECT SUM(price) AS final_price FROM order_list
 WHERE order_date = '2021-09-03 20:22:33';
 
 
-
+ALTER TABLE orders ALTER COLUMN final_price SET NOT NULL;
 
 INSERT INTO orders(customers_cid, status_completed, created_at, final_price)
 VALUES(3, True, (SELECT order_date FROM order_list WHERE order_date = '2021-09-03 20:22:33' LIMIT 1),

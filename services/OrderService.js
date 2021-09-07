@@ -24,24 +24,22 @@ module.exports = class OrderService {
             const lowerBound = OLService.lower(obj.created_at);
 
             const priceFinalObj = {
-                quantity: 20,
-                store_products_spid: 6,
-                spid: 6,
-                customers_cid: 3,
+                quantity: 20, // doesnt matter the number as we are only using Object.keys
+                store_products_spid: 6, // doesnt matter the number as we are only using Object.keys
+                spid: 6, // doesnt matter the number as we are only using Object.keys
+                customers_cid: obj.customers_cid,
                 order_date: '2021-09-03 20:22:33',
                 upper: upperBound,
                 lower: lowerBound
             }
 
             const three = {
-                customers_cid: 3,
+                customers_cid: obj.customers_cid,
                 upper: upperBound,
                 lower: lowerBound
             }
-                       
-         
-            const final = await CrudModelInstance.selectPrice(priceFinalObj, 'order_list', 'store_products', 'price', three);
 
+            const final = await CrudModelInstance.selectPrice(priceFinalObj, 'order_list', 'store_products', 'price', three);
             const sumPrice = (Number(final.map(eee => eee.sum).join('')))
 
             const finalObj = {

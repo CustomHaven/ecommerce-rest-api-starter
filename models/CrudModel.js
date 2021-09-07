@@ -40,6 +40,7 @@ module.exports = class CrudModel {
             const sqlQuery = createHelper(col, tableName);
             const colValues = Object.values(col);
             const result = await db.query(sqlQuery, colValues);
+
             if (result.rows?.length > 0) {
                 return result.rows[0]
             }
@@ -200,7 +201,9 @@ module.exports = class CrudModel {
     async selectPrice(obj, table1, table2, colname, columns) {
         try {
             const price = priceHelper(obj, table1, table2, colname)
+            // console.log(price)
             const colValues = Object.values(columns)
+            // console.log(colValues)
             const result = await db.query(price, colValues);
             if (result?.rows?.length) {
                 return result?.rows
