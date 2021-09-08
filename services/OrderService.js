@@ -2,8 +2,20 @@ const createError = require('http-errors');
 const CrudModel = require('../models/CrudModel');
 const CrudModelInstance = new CrudModel();
 const OLService = require('./OLService');
+const { EMAIL } = require('../config');
+const nodemailer = require('nodemailer');
 
 module.exports = class OrderService {
+
+     constructor() {
+        this.transport = nodemailer.createTransport({
+            service: EMAIL.ESERVICE,
+            auth: {
+                user: EMAIL.EUSER,
+                pass: EMAIL.EPASSWORD
+            }
+        })
+    }
 
     async allOrders(tableName) {
         try {
@@ -59,5 +71,29 @@ module.exports = class OrderService {
         } catch(err) {
             throw err;
         }
+    }
+
+    async stupid() {
+        consonle.log('I AM inside this class mail ORDER CLASS')
+        // console.log(mail)
+        // const { to, subject, text, html, attachments } = mail
+        // const message = {
+        //     from: EMAIL.EUSER,
+        //     to,
+        //     subject,
+        //     text,
+        //     html,
+        //     attachments
+        // }
+        // const post = await this.transport.sendMail(message, (err, info) => {
+        //     if (err) {
+        //        return err
+        //     } else {
+        //        return info
+        //     }
+        // });
+
+        // return post
+        // return message
     }
 }
