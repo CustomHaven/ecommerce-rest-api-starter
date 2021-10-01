@@ -31,8 +31,6 @@ module.exports = class AuthService {
         try {
             const { id } = data;
             const [user]= await CrudModelInstance.findOne(id, 'users', 'id');
-            console.log("login deserulize")
-            // console.log(user)
             if (!user) {
                 throw createError(404, 'No user found!')
             }
@@ -42,22 +40,33 @@ module.exports = class AuthService {
         }
     }
 
-    async sess(data) { // not used delete this
+    async sessID(data) {
         try {
-            // const { session_id, expire } = data;
-            const newObject = {};
-            Object.assign(newObject, data);
-            console.log('newObject')
-            console.log(newObject)
-            console.log('newObject')
+            const { id } = data;
+            const sessions = await CrudModelInstance.findOne(id, 'session', 'sid');
+            console.log('session id')
+            console.log(sessions)
+            console.log('session id')
+            if (!sessions) {
+                throw createError(404, 'No session found!', { expose: true })
+            }
+            const [session] = sessions;
+            return session;
+        } catch (error) {
+            return error
+        }
+    }
 
-            const session = CrudModelInstance.newRow(newObject, 'session');
+    async deleteSess(data) {
+        try {
+            const { id } = data;
+            const session = await CrudModelInstance.deleteRow(id, 'session', 'sid');
             if (!session) {
-                throw createError(401, 'Cookie failed to store')
+                throw createError(404, 'No session found!')
             }
             return session;
         } catch (error) {
-            return error;
+            return error
         }
     }
 }

@@ -1,5 +1,6 @@
 const authRouter = require('express').Router();
 const { SESS } = require('../config');
+const sessionHelper = require('../helpers/sessionHelper');
 
 module.exports = (app, passport) => {
     app.use('/auth', authRouter);
@@ -12,7 +13,9 @@ module.exports = (app, passport) => {
         }
     }
       
-    authRouter.get('/login', (req, res) => {
+    authRouter.get('/login', sessionHelper, (req, res) => {
+        // console.log(sessionHelper())
+        console.log('SUPER HELLO!!')
         res.render('login', { user: req.user })
     });
 
