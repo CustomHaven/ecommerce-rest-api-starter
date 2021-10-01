@@ -1,12 +1,15 @@
 const expressLoader = require('./express');
 const routeLoader = require('../routes'); //do routes
+const passportLoader = require('./passport');
 
 module.exports = async (app) => {
 
-    await expressLoader(app);
+    const expressApp = await expressLoader(app);
+
+    const passport = await passportLoader(expressApp);
 
 
-    routeLoader(app);
+    routeLoader(app, passport);
 
 
     // Error Handler

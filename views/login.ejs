@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page ecommerce</title>
+    <style>
+        body{
+            font-family: arial;
+            margin: 0;
+        }
+        nav{
+            background: #ff5353;
+            padding: 20px 10px;
+        }
+        nav ul{
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        nav li{
+            list-style-type: none;
+            display: inline-block;
+            margin: 0 10px 0 0;
+        }
+        nav a{
+            color: #fff;
+            font-size: 18px;
+            background: rgba(255,255,255,0.2);
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+        }
+        main, header{
+            max-width: 960px;
+            margin: 30px auto;
+            padding: 0 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <% if (user) { %>
+                <li><a href="/auth/logout">Logout</a></li>
+            <% } else { %>
+                <li><a href="/auth/login">Login</a></li>
+            <% } %>
+            <li><a href="/auth/home">Homepage</a></li>
+            <li><a href="/auth/profile">Profile</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Net Ninja OAuth Tut's</h1>
+        <h2>Homepage</h2>
+        <main>
+            <p>Probably the best OAuth tutorials on the planet :)</p>
+        </main>
+    </header>
+    <section>
+        <form action='/auth/login' method='POST'>
+            <label for="username">Email</label>
+            <input type="text" name="username" id="username" placeholder="Enter your email" />
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="password" />
+
+            <input type="submit" value="accept" />
+        </form>
+    </section>
+</body>
+</html>

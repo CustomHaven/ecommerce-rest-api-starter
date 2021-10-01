@@ -7,11 +7,12 @@ const pool = new Pool({
     database: DB.PGDATABASE,
     password: DB.PGPASSWORD,
     port: DB.PGPORT
-}) 
+})
 
 
 module.exports = {
   query: (text, params, callback) => {
     return pool.query(text, params, callback)
   },
+  // pool: pool
 }

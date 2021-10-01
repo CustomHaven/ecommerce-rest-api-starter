@@ -35,6 +35,19 @@ module.exports = class CrudModel {
             throw err
         }
     }
+    async findOneByEmail(email, tableName, colName) {
+        try {
+            const result = await db.query(`SELECT * FROM ${tableName} WHERE ${colName} = $1`, [email])
+
+            if (result.rows?.length > 0) {
+                return result.rows
+            }
+
+            return null;
+        } catch(err) {
+            throw err
+        }
+    }
     async newRow(col, tableName) {
         try {
             const sqlQuery = createHelper(col, tableName);

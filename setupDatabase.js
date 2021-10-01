@@ -5,12 +5,13 @@ const { DB } = require('./config');
     const users = `
         CREATE TABLE IF NOT EXISTS users (
             id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-            email varchar(50),      
+            email varchar(50) UNIQUE,      
             password text,
+            is_admin boolean,
             first_name varchar(50),
             last_name varchar(50),
-            google json,
-            facebook json
+            google_id varchar(255),
+            facebook_id varchar(255)
         );
     `
     const dealers = `
@@ -75,6 +76,14 @@ const { DB } = require('./config');
         );
     `
 
+    const session = `
+        CREATE TABLE IF NOT EXISTS session (
+            id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
+            session_id VARCHAR(255),
+            expire date
+        );
+    `
+
 
     try {
         const db = new Client({
@@ -88,14 +97,22 @@ const { DB } = require('./config');
         await db.connect();
 
         // Creating tables on database
-
+        await db.query(session);
         await db.query(users);
         await db.query(dealers);
         await db.query(dealer_products);
         await db.query(store_products);
         await db.query(customers);
-        await db.query(ordered_items);
+        await db.query(order_list);
         await db.query(orders);
+
+        // const userAdd = `
+        //     ALTER TABLE users
+        //     ADD COLUMN google_id varchar(255),
+        //     ADD COLUMN facebook_id varchar(255);     
+        // `
+
+        // await db.query(userAdd);
 
         await db.end();
 
