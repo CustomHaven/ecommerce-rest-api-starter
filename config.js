@@ -1,6 +1,7 @@
 require('dotenv').config();
 module.exports = {
     PORT: process.env.PORT,
+    HOST: process.env.HOST,
     DB: {
         PGHOST: process.env.PGHOST,
         PGUSER: process.env.PGUSER,

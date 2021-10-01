@@ -3,7 +3,7 @@ const app = express();
 
 const loaders = require('./loaders');
 
-const { PORT } = require('./config');
+const { HOST, PORT} = require('./config');
 
 
 async function startServer () {
@@ -12,7 +12,7 @@ async function startServer () {
 
 
     app.listen(PORT, () => {
-        console.log(`Server is listening on port http://localhost:${PORT}`);
+        console.log(`Server is listening on port ${HOST}:${PORT}`);
     });
 
 }
