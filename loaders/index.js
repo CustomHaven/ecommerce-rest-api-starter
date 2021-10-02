@@ -1,6 +1,7 @@
 const expressLoader = require('./express');
 const routeLoader = require('../routes'); //do routes
 const passportLoader = require('./passport');
+const swaggerLoader = require('./swagger');
 
 module.exports = async (app) => {
 
@@ -11,7 +12,7 @@ module.exports = async (app) => {
 
     routeLoader(app, passport);
 
-
+    swaggerLoader(app);
     // Error Handler
     app.use((err, req, res, next) => {
 

@@ -50,12 +50,3 @@ module.exports = (app, passport) => {
         })
     });
 }
-
-/* authRouter.post('/login', passport.authenticate('local', { 
-        failureRedirect: '/auth/login',        
-        failureFlash: true,
-        failWithError: true
-    }),
-
-    double check this in the front end if passport does return..  return done(null, false, user.message) the error message
-    */

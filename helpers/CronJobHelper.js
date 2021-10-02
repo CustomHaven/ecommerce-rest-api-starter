@@ -23,7 +23,7 @@ function formatDate(date) {
   month: 1-12 (or names) is not the same for javascript 0-11
   day of week: 0-7 (or names, 0 or 7 are sunday) same for javascript
 */ // later getHours remove the + 1 as my computer is 1 hour before whatever is stored to my DB
-  return `${date.getSeconds()} ${date.getMinutes() + 1} ${date.getHours() + 1} ${date.getDate()} ${date.getMonth() + 1} ${date.getDay()}`;
+  return `${date.getSeconds() + 2} ${date.getMinutes()} ${date.getHours() + 1} ${date.getDate()} ${date.getMonth() + 1} ${date.getDay()}`;
 }
 
 
