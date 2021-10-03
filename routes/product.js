@@ -14,11 +14,11 @@ module.exports = (app) => {
 
             res.status(200).send(response);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     });
 
-    productRouter.post('/', async (req, res) => {
+    productRouter.post('/', async (req, res, next) => {
         try { // important comment out remember this!!!
             /* For now I will use dealer_product_dpid hard-coded with postman later on
             I will have the dpid from the front end key change Object.key name to
@@ -30,38 +30,38 @@ module.exports = (app) => {
             const response = await ProductServiceInstance.addProduct(req.body, 'store_products')
             res.status(201).send(response);
         } catch(err) {
-            res.status(500).send(err);
+            next(err)
         }
     });
 
-    productRouter.get('/:productId', async (req, res) => {
+    productRouter.get('/:productId', async (req, res, next) => {
         try {
            const { productId } = req.params;
            console.log(Number(productId))
            const product = await ProductServiceInstance.oneProduct(Number(productId), 'store_products', 'spid');
            res.status(200).send(product);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
 
-    productRouter.put('/:productId', async (req, res) => {
+    productRouter.put('/:productId', async (req, res, next) => {
         try {
             const id = Number(req.params.productId)
             const updatedProduct = await ProductServiceInstance.updateProduct(id, req.body, 'store_products', 'spid');
             res.status(201).send(updatedProduct);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
 
-    productRouter.delete('/:dealerId', async (req, res) => {
+    productRouter.delete('/:productId', async (req, res, next) => {
         try {
-           const id = Number(req.params.dealerId);
+           const id = Number(req.params.productId);
            await ProductServiceInstance.removeProduct(id, 'store_products', 'spid');
            res.sendStatus(204);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
 }

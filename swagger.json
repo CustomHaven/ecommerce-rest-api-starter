@@ -10,19 +10,680 @@
         }
     },
     "schema": ["http", "https"],
-    "host": "localhost:4001",
-    "basepath": "/",
+    "servers": [
+        {
+            "url": "http://localhost:4001/"
+        }
+    ],
     "paths": {
-        "/products": {
+        "/dealers": {
             "get": {
-                "summary": "Get all products in store",
-                "description": "Every product",
-                "produces": ["application/json"],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Supplier details",
+                "description": "Suppliers Info",
+                "produces": [
+                    "application/json"
+                ],
                 "responses": {
                     "200": {
                         "description": "200 Success",
                         "content": {}
                     }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Add a new supplier",
+                "description": "A new supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Add a new supplier",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Supplier Info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Supplier added",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dealers/{dealerId}": {
+            "get": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Find a Supplier based on ID",
+                "description": "Supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "dealerId",
+                        "in": "path",
+                        "description": "Enter a number to find a supplier",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The product",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Update a supplier's details",
+                "description": "Update supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "dealerId",
+                        "in": "path",
+                        "description": "Enter a number to fetch a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update supplier",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Supplier Info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The product",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Delete a supplier completely",
+                "description": "Delete supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "dealerId",
+                        "in": "path",
+                        "description": "Enter a number to fetch a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The product",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dealers/{name}/products": {
+            "get": {
+                "tags": [
+                    "Supplier's Products"
+                ],
+                "summary": "List a supplier's products",
+                "description": "Supplier product list",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Enter the name of a supplier",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Supplier and their products",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Supplier's Products"
+                ],
+                "summary": "Save a new product from a supplier",
+                "description": "Save product",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Enter the name of a supplier",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Add a product",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Supplier's Products"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Supplier and their products",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/dealers/{name}/products/{productId}": {
+            "get": {
+                "tags": [
+                    "Supplier's Products"
+                ],
+                "summary": "Get one product of a supplier",
+                "description": "One product from supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Enter the name of a supplier",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "Enter the id of a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Supplier's product",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Supplier's Products"
+                ],
+                "summary": "Update one product of a supplier's products",
+                "description": "Update one product from supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Enter the name of a supplier",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "Enter the id of a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Add a new product",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Supplier's Products"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Supplier's product",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Supplier's Products"
+                ],
+                "summary": "Delete one product from a supplier's products",
+                "description": "Delete one product from supplier",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Enter the name of a supplier",
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "Enter the id of a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successfully Deleted",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Store Products"
+                ],
+                "summary": "Get all products in store",
+                "description": "Every product",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "200 Success",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Store Products"
+                ],
+                "summary": "Make a new project",
+                "description": "New product",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Add a new product",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/New Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New user added",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/products/{productId}": {
+            "get": {
+                "tags": [
+                    "Store Products"
+                ],
+                "summary": "Get one product based on ID",
+                "description": "A product",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "Enter a number to fetch a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The product",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Store Products"
+                ],
+                "summary": "Update one product based on ID",
+                "description": "Update product",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "Enter a number to fetch a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update the product",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Update Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Updated Successful",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Failed to Update",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Store Products"
+                ],
+                "summary": "Delete one product based on ID",
+                "description": "Delete product",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "Delete a product",
+                        "required": true,
+                        "schema": {
+                          "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successfully Deleted",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Failed to Delete",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Supplier Info": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "Stark Industries",
+                    "description": "Run by Tony Stark, the Iron Man"
+                }
+            },
+            "Supplier's Products": {
+                "type": "object",
+                "properties": {
+                    "product_name": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "product_name": "Reebok",
+                    "type": "Clothes",
+                    "description": "Warm jumper",
+                    "price": 20,
+                    "quantity": 5000
+                }
+            },
+            "New Product": {
+                "type": "object",
+                "properties": {
+                    "dpid": {
+                        "type": "integer"
+                    },
+                    "product_name": {
+                        "type": "string" 
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "dpid",
+                    "product_name",
+                    "quantity"
+                ],
+                "example": {
+                    "dpid": 3,
+                    "product_name": "Baked Beans",
+                    "type": "Food",
+                    "description": "Best beans in town!",
+                    "quantity": 200
+                }
+            },
+            "Update Product": {
+                "type": "object",
+                "properties": {
+                    "dealer_product_dpid": {
+                        "type": "integer"
+                    },
+                    "product_name": {
+                        "type": "string" 
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "dealer_product_dpid": 3,
+                    "product_name": "Baked Beans",
+                    "type": "Food",
+                    "description": "Best beans in town!",
+                    "quantity": 200
                 }
             }
         }

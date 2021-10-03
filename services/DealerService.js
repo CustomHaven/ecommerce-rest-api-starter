@@ -44,7 +44,7 @@ module.exports = class DealerService {
         try {
             const dealer = await CrudModelInstance.findOne(id, tableName, idName);
             if (!dealer) {
-                throw createError(404, 'Supplier not found');
+                throw createError(404, 'Supplier does not have the requested product');
             }
 
             return dealer;
@@ -92,7 +92,7 @@ module.exports = class DealerService {
             const dealersProducts = results.filter(deal => deal.dealers_did === fKeyObj?.dealers_did);
             
             if (dealersProducts.length === 0) {
-                throw createError(404, 'Dealer/Supplier not found');
+                throw createError(404, 'Supplier has no products');
             }
             
             return dealersProducts;
@@ -123,12 +123,10 @@ module.exports = class DealerService {
 
     async addProduct(col, tableName) {
         try {
-            const newProduct = await CrudModelInstance.newRow(col, tableName)
-    
+            const newProduct = await CrudModelInstance.newRow(col, tableName);
             if (!newProduct) {
                 throw createError(404, 'Could not make the new product');
             }
-    
             return newProduct;
         } catch(err) {
             throw err;

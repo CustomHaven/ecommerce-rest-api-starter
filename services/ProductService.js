@@ -20,26 +20,29 @@ module.exports = class ProductService {
 
             const supplierProduct = await CrudModelInstance.findOne(col.dpid, 'dealer_products', 'dpid');
 
-
-            const quantity = {
-                quantity: supplierProduct[0].quantity - col.quantity
-            };
-
-            const column = {};
-            delete Object.assign(column, {
-                ['dealer_product_dpid']: col['dpid'],
-                ...col,
-                price: String(parseFloat(supplierProduct[0].price) * 3)
-            })['dpid'];
-
-            const product = await CrudModelInstance.newRow(column, tableName);
-            if (!product) {
-                throw createError(500, 'Product could not be added');
+            if (!supplierProduct) {
+                throw createError(404, "No Supplier with that ID found!")
+            } else {
+                const quantity = {
+                    quantity: supplierProduct[0].quantity - col.quantity
+                };
+    
+                const column = {};
+                delete Object.assign(column, {
+                    ['dealer_product_dpid']: col['dpid'],
+                    ...col,
+                    price: String(parseFloat(supplierProduct[0].price) * 3)
+                })['dpid'];
+    
+                const product = await CrudModelInstance.newRow(column, tableName);
+                if (!product) {
+                    throw createError(500, 'Product could not be added');
+                }
+                if (product) {
+                    await CrudModelInstance.updateRow(supplierProduct[0].dpid, quantity, 'dealer_products', 'dpid');
+                }
+                return product;
             }
-            if (product) {
-                await CrudModelInstance.updateRow(supplierProduct[0].dpid, quantity, 'dealer_products', 'dpid');
-            }
-            return product;
         } catch(err) {
             throw err;
         }
@@ -47,11 +50,11 @@ module.exports = class ProductService {
 
     async oneProduct(id, tableName, idName) {
         try {
-            const product = await CrudModelInstance.findOne(id, tableName, idName);
-            if (!product) {
+            const products = await CrudModelInstance.findOne(id, tableName, idName);
+            if (!products) {
                 throw createError(404, 'Product not found');
             }
-
+            const [product] = products;
             return product;
             
         } catch(err) {
@@ -76,9 +79,7 @@ module.exports = class ProductService {
 
     async removeProduct(id, tableName, idName) {
         try {
-
             const deleteDealer = await CrudModelInstance.deleteRow(id, tableName, idName);
-
             if (deleteDealer === null) {
                 throw createError(404, 'Product could not be deleted');
             }

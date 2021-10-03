@@ -57,7 +57,4 @@ module.exports = (app) => {
             res.status(404).send(err)
         }
     })
-}
-
-// INSERT INTO films (name, release_year)
-// VALUES ('Monsters, Inc.', 2001);
+};
