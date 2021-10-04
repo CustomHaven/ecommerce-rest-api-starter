@@ -51,6 +51,7 @@ const { DB } = require('./config');
             last_name varchar(50),
             address varchar(100),
             zip_code varchar(25),
+            city varchar(50)
             country varchar(50),
             email varchar(50) NOT NULL
         );

@@ -581,6 +581,419 @@
                     }
                 }
             }
+        },
+        "/customers": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get all customers",
+                "description": "All customers",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "200 Success",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Make a new customer",
+                "description": "New customer",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Add a new customer",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/New Customer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Customer added",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/customers/{customerId}": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get one customer",
+                "description": "One customer",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "description": "Fetch a customer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer found",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Update a customer's details",
+                "description": "Update customer info",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "description": "Enter customer's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update the customer",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/New Customer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Customer updated",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Failed to Update",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete a customer",
+                "description": "Delete customer",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "description": "Insert customer's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete customer",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orderlist": {
+            "get": {
+                "tags": [
+                    "List Of Orders"
+                ],
+                "summary": "Display the whole list",
+                "description": "Entire List",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "List Of Orders"
+                ],
+                "summary": "Set up an order list from cart list",
+                "description": "Set up order list",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Set up order list",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/An Order List"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successfully made an order list for a customer",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Failed to make an order list",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orderlist/{date}": {
+            "delete": {
+                "tags": [
+                    "List Of Orders"
+                ],
+                "summary": "Delete a customer's order list",
+                "description": "Delete an order list",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "path",
+                        "description": "Enter a date",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted order list/cart list",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Failed to delete the order list",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orderlist/{customerId}/{date}": {
+            "get": {
+                "tags": [
+                    "List Of Orders"
+                ],
+                "summary": "Find a particular item that a customer has bought",
+                "description": "Find the bought item",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "description": "Enter the customer's id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "path",
+                        "description": "Enter a date",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully found the item",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Completed orders",
+                "description": "Successfully Purchases",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All orders",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "No orders",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "The store is growing a new order has been submitted",
+                "description": "A new order submitted",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "New order",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New order added",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Failed to add the order",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/orders/email/{orderId}": {
+            "get": {
+                "tags": [
+                    "Email Client"
+                ],
+                "summary": "Email customer to tell them their order was successful",
+                "description": "Email the customer",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "Enter the order id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Check your inbox",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -684,6 +1097,131 @@
                     "type": "Food",
                     "description": "Best beans in town!",
                     "quantity": 200
+                }
+            },
+            "New Customer": {
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "zip_code": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "address": "10 Downing Street",
+                    "zip_code": "SW1A 2AA",
+                    "city": "London",
+                    "country": "United Kingdom",
+                    "email": "example@example.com"
+                }
+            },
+            "An Order List": {
+                "type": "array",
+                "properties": [
+                    {
+                        "customers_cid": {
+                            "type": "integer"
+                        },
+                        "store_products_spid": {
+                            "type": "integer"
+                        },
+                        "quantity": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "customers_cid": {
+                            "type": "integer"
+                        },
+                        "store_products_spid": {
+                            "type": "integer"
+                        },
+                        "quantity": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "customers_cid": {
+                            "type": "integer"
+                        },
+                        "store_products_spid": {
+                            "type": "integer"
+                        },
+                        "quantity": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "customers_cid": {
+                            "type": "integer"
+                        },
+                        "store_products_spid": {
+                            "type": "integer"
+                        },
+                        "quantity": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "example": [
+                    {
+                        "customers_cid": 32,
+                        "store_products_spid": 3,
+                        "quantity": 3
+                    },
+                    {
+                        "customers_cid": 32,
+                        "store_products_spid": 5,
+                        "quantity": 5
+                    },
+                    {
+                        "customers_cid": 32,
+                        "store_products_spid": 6,
+                        "quantity": 6
+                    },
+                    {
+                        "customers_cid": 32,
+                        "store_products_spid": 4,
+                        "quantity": 4
+                    }
+                ]
+            },
+            "Order": {
+                "type": "object",
+                "properties": {
+                    "customers_cid": {
+                        "type": "integer"
+                    },
+                    "status_completed": {
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "customers_cid": 32,
+                    "status_completed": true,
+                    "created_at": "2021-10-03 19:06:34"
                 }
             }
         }

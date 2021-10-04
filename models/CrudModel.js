@@ -1,8 +1,10 @@
+const createError = require('http-errors');
 const db = require('../db');
 const moment = require('moment');
 const updateHelper = require('../helpers/updateHelper');
 const createHelper = require('../helpers/createHelper');
 const priceHelper = require('../helpers/priceHelper');
+const threeTableHelper = require('../helpers/threeTableHelper');
 
 module.exports = class CrudModel {
     constructor(data = {}) {
@@ -53,11 +55,14 @@ module.exports = class CrudModel {
             const sqlQuery = createHelper(col, tableName);
             const colValues = Object.values(col);
             const result = await db.query(sqlQuery, colValues);
-
-            if (result.rows?.length > 0) {
-                return result.rows[0]
+            if (!result) {
+                return null
+            } else {
+                if (result.rows?.length > 0) {
+                    return result.rows[0]
+                }
+                return null;
             }
-            return null;
         } catch(err) {
             throw new Error(err);
         }
@@ -218,10 +223,25 @@ module.exports = class CrudModel {
             const colValues = Object.values(columns)
             // console.log(colValues)
             const result = await db.query(price, colValues);
+            // console.log(result)
             if (result?.rows?.length) {
-                return result?.rows
-            } 
+                if (result?.rows[0]?.sum !== null) {
+                    return result?.rows[0]?.sum
+                }
+            }
+            return null;
+        } catch(err) {
+            throw err;
+        }
+    }
 
+    async queryThreeTables(cols, tables, values) {
+        try {
+            const threeTables = threeTableHelper(cols, tables);
+            const result = await db.query(threeTables, values);
+            if (result?.rows?.length) {
+                return result?.rows;
+            }
             return null;
         } catch(err) {
             throw err;

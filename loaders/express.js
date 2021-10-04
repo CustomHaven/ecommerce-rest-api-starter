@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const session = require('express-session');
 const { SESS } = require('../config');
 const db = require('../db');
-const pgSession = require('connect-pg-simple')(session);; // bring this back
+const pgSession = require('connect-pg-simple')(session); // bring this back
 const flash = require('connect-flash');
 
 // console.log(require('crypto').randomBytes(64).toString('hex'));

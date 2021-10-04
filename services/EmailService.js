@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const createError = require('http-errors');
 const { EMAIL } = require('../config');
 
 module.exports = class EmailService {
@@ -22,6 +23,12 @@ module.exports = class EmailService {
             html,
             attachments
         }
-        return await this.transport.sendMail(message, (err, info) => err ? console.log(err) : console.log(info));
+        return await this.transport.sendMail(message, (err, info) => {
+            if (err) {
+                throw createError(500, err.message)
+            } else {
+                console.log(info)
+            }
+        });
     }
 };

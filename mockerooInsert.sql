@@ -192,7 +192,10 @@ WHERE customers_cid = 3
 AND store_products_spid = 5
 AND order_date = '2021-09-03 20:22:33';
 
-
+SELECT cu.email FROM customers AS cu
+JOIN orders AS o
+ON o.customers_cid = cu.cid
+WHERE cid = 3;
 
 
 UPDATE order_list
@@ -206,6 +209,31 @@ AND ol.customers_cid = 3)
 WHERE customers_cid = 3 
 AND store_products_spid = 4
 AND order_date = '2021-09-03 20:38:50';
+{
+cid = 32 .. direct from customers table mission is to list all product_name and price sum from the store_product TABLE
+
+customer table link with order_list link to store_products
+
+SELECT store_products.product_name,  SUM(store_products.price * order_list.quantity) FROM store_products 
+JOIN order_list 
+ON order_list.store_products_spid = store_products.spid 
+JOIN customers 
+ON order_list.customers_cid = customers.cid 
+WHERE order_list.customers_cid = 32 AND 
+order_list.order_date < '2021-10-03 19:09:34' AND order_list.order_date > '2021-10-03 19:03:34' 
+GROUP BY 1
+ORDER BY 1 ASC;
+
+obj = {
+  cid: 32
+}
+
+ 3 | 5.97 = 17.91
+ 5 | 21.90 = 109.50
+ 6 | 1.50 = 9
+ 4 | 5.97 = 23.88
+}
+
 
 
 -- 

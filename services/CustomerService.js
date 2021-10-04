@@ -22,12 +22,12 @@ module.exports = class CustomerService {
 
     async findOneCustomer(id, tableName, idName) {
         try {
-            const customer = await CrudModelInstance.findOne(id, tableName, idName);
+            const customers = await CrudModelInstance.findOne(id, tableName, idName);
 
-            if (!customer) {
+            if (!customers) {
                 throw createError(404, 'Customer not found');
             }
-
+            const [customer] = customers;
             return customer;
             
         } catch(err) {

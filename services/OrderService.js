@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const moment = require('moment');
 const CrudModel = require('../models/CrudModel');
 const CrudModelInstance = new CrudModel();
 const OLService = require('./OLService');
@@ -15,6 +16,41 @@ module.exports = class OrderService {
                 pass: EMAIL.EPASSWORD
             }
         })
+    }
+
+    static upper(date) {
+        const copy = date;
+        const upper = moment(copy, 'YYYY-MM-DD HH:mm:ss')
+                        .add(3, 'minutes')
+                        .add(1, 'hour');
+        
+        const upperBound = upper.toISOString(true).replace(/\.\d+\+\d+\:\d+/, '').replace(/T/, ' ');
+
+        return upperBound;
+    }
+
+    static lower(date) {
+        const copy = date;
+        const lower = moment(copy, 'YYYY-MM-DD HH:mm:ss')
+                        .subtract(3, 'minutes')
+                        .add(1, 'hour');
+
+        const lowerBound = lower.toISOString(true).replace(/\.\d+\+\d+\:\d+/, '').replace(/T/, ' ');
+
+        return lowerBound;
+    }
+
+    static async fetchCustomer(id, tableName, idName) {
+        try {
+            const customers = await CrudModelInstance.findOne(id, tableName, idName)
+            if (!customers) {
+                return null
+            }
+            const [customer] = customers;
+            return customer;
+        } catch (err) {
+            throw err
+        }
     }
 
     async allOrders(tableName) {
@@ -51,49 +87,89 @@ module.exports = class OrderService {
                 lower: lowerBound
             }
 
-            const final = await CrudModelInstance.selectPrice(priceFinalObj, 'order_list', 'store_products', 'price', three);
-            const sumPrice = (Number(final.map(eee => eee.sum).join('')))
+            const finalPrice = await CrudModelInstance.selectPrice(priceFinalObj, 'order_list', 'store_products', 'price', three);
 
-            const finalObj = {
-                customers_cid: Number(obj.customers_cid),
-                status_completed: obj.status_completed,
-                created_at: obj.created_at,
-                final_price: sumPrice
+            if (!finalPrice) {
+                throw createError(404, 'Cannot find the list of items bought by the customer');
+            } else {
+                const finalObj = {
+                    customers_cid: Number(obj.customers_cid),
+                    status_completed: obj.status_completed,
+                    created_at: obj.created_at,
+                    final_price: finalPrice
+                }
+    
+                const order = await CrudModelInstance.newRow(finalObj, tableName);
+    
+                if (!order) {
+                    throw createError(404, 'No new order recorded');
+                }
+                return order;
             }
-
-            const order = await CrudModelInstance.newRow(finalObj, tableName);
-
-            if (!order) {
-                throw createError(404, 'No new order recorded');
-            }
-
-            return order;
         } catch(err) {
             throw err;
         }
     }
 
-    async stupid() {
-        consonle.log('I AM inside this class mail ORDER CLASS')
-        // console.log(mail)
-        // const { to, subject, text, html, attachments } = mail
-        // const message = {
-        //     from: EMAIL.EUSER,
-        //     to,
-        //     subject,
-        //     text,
-        //     html,
-        //     attachments
-        // }
-        // const post = await this.transport.sendMail(message, (err, info) => {
-        //     if (err) {
-        //        return err
-        //     } else {
-        //        return info
-        //     }
-        // });
+    async getOrderList(col, table, values) {
+        try {
+            const queryTables = await CrudModelInstance.queryThreeTables(col, table, values)
+            if (!queryTables) {
+                throw (404, 'Could not locate order list')
+            }
+            return queryTables
+        } catch (err) {
+            throw err
+        }
+    }
 
-        // return post
-        // return message
+    async findAnOrder(id, tableName, idName) {
+        try {
+            const orders = await CrudModelInstance.findOne(id, tableName, idName);
+
+            if (!orders) {
+                throw createError(404, 'No order found');
+            } else {
+                const [order] = orders;
+                const order_date = order.created_at.toISOString().replace(/[a-z]/i, ' ').replace(/\..+/, '');
+                const customer = await OrderService.fetchCustomer(order.customers_cid, 'customers', 'cid');
+                if (!customer) {
+                    throw createError(404, 'Customer could not be found');
+                }
+                const upperBound = OrderService.upper(order_date)
+                const lowerBound = OrderService.lower(order_date)
+
+                const columns = {
+                    customers_cid: order.customers_cid,
+                    order_date: upperBound,
+                    created_at: lowerBound,
+                    product_name: 'cid',
+                    price: 'quantity',
+                    store_products_spid: 'spid'
+                }
+                const tables = {
+                    store_products: 1,
+                    order_list: 'order_list',
+                    customers: 'customers'
+                }
+                const values = [
+                    order.customers_cid,
+                    upperBound,
+                    lowerBound,
+                    1
+                ]
+
+                const orderList = await this.getOrderList(columns, tables, values);
+
+                const obj = {
+                    order,
+                    customer,
+                    orderList
+                }
+                return obj;
+            }
+        } catch (err) {
+            throw err
+        }
     }
 }

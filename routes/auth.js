@@ -46,7 +46,7 @@ module.exports = (app, passport) => {
             return res.redirect('/auth/home')
           }
           res.clearCookie(SESS.NAME)
-          res.redirect('/auth/login')
+          res.redirect('/docs')
         })
     });
 }

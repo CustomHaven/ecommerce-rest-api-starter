@@ -13,17 +13,18 @@ module.exports = (app) => {
 
             res.status(200).send(response);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     
     })
 
     customersRouter.post('/', async (req, res, next) => {
         try {
+            console.log("welcome!")
             const response = await CustomerServiceInstance.makeNewCustomer(req.body, 'customers')
             res.status(201).send(response);
         } catch(err) {
-            res.status(500).send(err)
+            next(err);
         }
     })
 
@@ -33,7 +34,7 @@ module.exports = (app) => {
            const customer = await CustomerServiceInstance.findOneCustomer(Number(customerId), 'customers', 'cid');
            res.status(200).send(customer);
         } catch(err) {
-           res.status(404).send(err)
+           next(err);
         }
     })
 
@@ -43,7 +44,7 @@ module.exports = (app) => {
            const customerUpdated = await CustomerServiceInstance.customerUpdate(id, req.body, 'customers', 'cid');
            res.status(201).send(customerUpdated);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
     
@@ -52,9 +53,9 @@ module.exports = (app) => {
            const id = Number(req.params.customerId)
            await CustomerServiceInstance.removeCustomer(id, 'customers', 'cid');
 
-            res.status(201).send("Customer successfully deleted");
+            res.sendStatus(204);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
 };
