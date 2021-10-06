@@ -1,5 +1,5 @@
 const customersRouter = require('express').Router();
-
+const { isAdmin } = require('../helpers/authHelper');
 const CustomerService = require('../services/CustomerService');
 const CustomerServiceInstance = new CustomerService();
 
@@ -7,7 +7,7 @@ const CustomerServiceInstance = new CustomerService();
 module.exports = (app) => {
     app.use('/customers', customersRouter);
 
-    customersRouter.get('/', async (req, res, next) => {
+    customersRouter.get('/', isAdmin, async (req, res, next) => {
         try {
             const response = await CustomerServiceInstance.allCustomers('customers');
 

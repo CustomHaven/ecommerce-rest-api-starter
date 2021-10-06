@@ -29,6 +29,7 @@ module.exports = (app) => {
     passport.use(new LocalStrategy(
         async (username, password, done) => {
             try {
+                console.log('helo passport')
                 const user = await AuthServiceInstance.localLogin({ email: username, password });
                 console.log('local')
                 if (user.message === 'Incorrect email.') {

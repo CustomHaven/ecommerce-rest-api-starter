@@ -11,18 +11,18 @@ module.exports = class AuthService {
             const users = await CrudModelInstance.findOneByEmail(email, 'users', 'email');
 
             if (!users) {
-                throw createError(404, 'Incorrect email.', { expose: true })
+                throw createError(404, 'Incorrect email.', { expose: true });
             } else {
                 const [user] = users
                 const similarPassword = await bycrypt.compare(password, user.password);
                 if (!similarPassword) {
-                    throw createError(401, 'Incorrect password.', { expose: true })
+                    throw createError(401, 'Incorrect password.', { expose: true });
                 } else {
                     return user;
                 }
             }
-        } catch (error) {
-            return error;
+        } catch (err) {
+            throw err;
         }
         
     }
@@ -35,8 +35,8 @@ module.exports = class AuthService {
                 throw createError(404, 'No user found!')
             }
             return user
-        } catch (error) {
-            return error;
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -48,12 +48,14 @@ module.exports = class AuthService {
             console.log(sessions)
             console.log('session id')
             if (!sessions) {
-                throw createError(404, 'No session found!', { expose: true })
+                console.log('WRONG NULL')
+                throw createError(404, 'No session found!'); // placed throw err in catch so i can do false
+                // return null
             }
             const [session] = sessions;
             return session;
-        } catch (error) {
-            return error
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -65,8 +67,8 @@ module.exports = class AuthService {
                 throw createError(404, 'No session found!')
             }
             return session;
-        } catch (error) {
-            return error
+        } catch (err) {
+           throw err;
         }
     }
 }

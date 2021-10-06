@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecommerce testing homepage</title>
+    <title>Admin ecommerce</title>
     <style>
         body{
             font-family: arial;
@@ -43,25 +43,27 @@
 <body>
     <nav>
         <ul>
-            <% if (user) { %>
-                <li><a href="/auth/logout">Logout</a></li>
-            <% } else { %>
-                <li><a href="/auth/login">Login</a></li>
-            <% } %>
-            <li><a href="/auth/home">Homepage</a></li>
-            <% if (user?.is_admin) { %>
-                <li><a href="/auth/admin">Admin</a></li>
-            <% } else { %>
-                <li><a href="/auth/profile">Profile</a></li>
-            <% } %>
+          <% if (user) { %>
+            <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+            <li><a href="/auth/login">Login</a></li>
+        <% } %>
+        <li><a href="/auth/home">Homepage</a></li>
+        <% if (user?.is_admin) { %>
+            <li><a href="/auth/admin">Admin</a></li>
+        <% } else { %>
+            <li><a href="/auth/profile">Profile</a></li>
+        <% } %>
         </ul>
     </nav>
     <header>
-        <h1>Ecommerce</h1>
-        <h2>Homepage</h2>
-        <main>
-            <p>Probably the best OAuth tutorials on the planet :)</p>
-        </main>
+        <h1>Welcome to your profile, <%= user.email %></h1>
+    <main>
+      <!-- <img src="<%= user.thumbnail %>" alt="photo" /> -->
+      <p>This is your profile thumbnail</p>
+      <p>Yes you are the admin <%= user.admin %> so welcome</p>
+
+    </main>
     </header>
 </body>
 </html>

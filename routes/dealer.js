@@ -1,11 +1,12 @@
 const dealersRouter = require('express').Router();
+const { isAdmin } = require('../helpers/authHelper');
 const DealerService = require('../services/DealerService');
 const DealerServiceInstance = new DealerService();
 
 module.exports = (app) => {
     app.use('/dealers', dealersRouter);
     /// SUpplier bits
-    dealersRouter.get('/', async (req, res, next) => {
+    dealersRouter.get('/', isAdmin, async (req, res, next) => {
 
         try {
             const response = await DealerServiceInstance.allDealers('dealers');
@@ -16,7 +17,7 @@ module.exports = (app) => {
     
     })
 
-    dealersRouter.post('/', async (req, res, next) => {
+    dealersRouter.post('/', isAdmin, async (req, res, next) => {
         try {
             const response = await DealerServiceInstance.addDealer(req.body, 'dealers')
             res.status(201).send(response);
@@ -25,7 +26,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.get('/:dealerId', async (req, res, next) => {
+    dealersRouter.get('/:dealerId', isAdmin, async (req, res, next) => {
         try {
            const { dealerId } = req.params;
            const aDealer = await DealerServiceInstance.oneDealer(Number(dealerId), 'dealers', 'did');
@@ -35,7 +36,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.put('/:dealerId', async (req, res, next) => {
+    dealersRouter.put('/:dealerId', isAdmin, async (req, res, next) => {
         try {
             const id = Number(req.params.dealerId)
             const customerUpdated = await DealerServiceInstance.updateDealer(id, req.body, 'dealers', 'did');
@@ -45,7 +46,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.delete('/:dealerId', async (req, res, next) => {
+    dealersRouter.delete('/:dealerId', isAdmin, async (req, res, next) => {
         try {
            const id = Number(req.params.dealerId);
            await DealerServiceInstance.removeDealer(id, 'dealers', 'did');
@@ -87,7 +88,7 @@ module.exports = (app) => {
     })
 
 
-    dealersRouter.get('/:name/products', async (req, res, next) => {
+    dealersRouter.get('/:name/products', isAdmin, async (req, res, next) => {
         try {
             console.log(req.name)
             const dealersProducts = await DealerServiceInstance.dealersProducts('dealer_products', req.name);                        
@@ -97,7 +98,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.post('/:name/products', async (req, res, next) => {
+    dealersRouter.post('/:name/products', isAdmin, async (req, res, next) => {
         try {
             const obj = Object.assign({}, {[Object.keys(req.name)[2]]: Object.values(req.name)[2]}, req.body)
             const response = await DealerServiceInstance.addProduct(obj, 'dealer_products')
@@ -107,7 +108,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.get('/:name/products/:productId', async (req, res, next) => {
+    dealersRouter.get('/:name/products/:productId', isAdmin, async (req, res, next) => {
         try {
             res.status(200).send(req.single);
         } catch(err) {
@@ -115,7 +116,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.put('/:name/products/:productId', async (req, res, next) => {
+    dealersRouter.put('/:name/products/:productId', isAdmin, async (req, res, next) => {
         try {
             const obj = {}
             Object.assign(obj, req.body)
@@ -133,7 +134,7 @@ module.exports = (app) => {
         }
     })
 
-    dealersRouter.delete('/:name/products/:productId', async (req, res, next) => {
+    dealersRouter.delete('/:name/products/:productId', isAdmin, async (req, res, next) => {
         try {
             await DealerServiceInstance.deleteProduct(req.single.dpid, 'dealer_products', 'dpid');
             res.sendStatus(204);

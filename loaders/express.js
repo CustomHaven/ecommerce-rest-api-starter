@@ -22,6 +22,15 @@ module.exports = (app) => {
 
     app.use(bodyParser.urlencoded({ extended: true }));
     
+    // app.use((req, res, next) => {
+    //     res.setHeader('Access-Control-Allow-Origin', '*')
+    //     res.setHeader(
+    //         'Access-Control-Allow-Headers',
+    //         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    //     )
+    
+    //     next()
+    // })
 
     // (async () => {
     //     const client = await db.pool.connect();
@@ -57,4 +66,32 @@ module.exports = (app) => {
 }
 
 
-
+// const options = {
+//   swaggerDefinition: {
+//     openapi: "3.0.1",
+//     info: {
+//       title: "My apis in swaager",
+//       version: "1.0.0",
+//     },
+//     servers: [
+//       {
+//         url: "http://localhost:8082",
+//       },
+//     ],
+//     components: {
+//       securitySchemes: {
+//         bearerAuth: {
+//           type: "http",
+//           scheme: "bearer",
+//           bearerFormat: "JWT",
+//         },
+//       },
+//     },
+//     security: [
+//       {
+//         bearerAuth: [],
+//       },
+//     ],
+//   },
+//   apis: ["./routes/*.js"],
+// };

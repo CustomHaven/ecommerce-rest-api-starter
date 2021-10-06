@@ -2,22 +2,29 @@ const usersRouter = require('express').Router();
 const UserService = require('../services/UserService');
 const UserServiceInstance = new UserService();
 const bcrypt = require('bcryptjs');
+const { isAdmin } = require('../helpers/authHelper');
+const createError = require('http-errors');
 
-// change this to super admins instead!
 module.exports = (app) => {
     app.use('/users', usersRouter);
 
-    const isAdmin = (req, res, next) => {
-        // const findUser = await UserServiceInstance. // session set it up now!
-    }
+    usersRouter.param('userId', async (req, res, next, userId) => {
+        try {
+            const user = await UserServiceInstance.findOneUser(Number(userId), 'users', 'id');
+            req.userInfo = user;
+            next();
+        } catch (err) {
+            next(err)
+        }
+    })
 
-    usersRouter.get('/', async (req, res, next) => {
+    usersRouter.get('/', isAdmin, async (req, res, next) => {
         try {
             const response = await UserServiceInstance.allUsers('users');
 
             res.status(200).send(response);
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     
     })
@@ -39,42 +46,71 @@ module.exports = (app) => {
             const response = await UserServiceInstance.newUser(data, 'users')
             res.status(201).send(response);
         } catch(err) {
-            res.status(500).send(err)
+            next(err);
         }
     })
 
     usersRouter.get('/:userId', async (req, res, next) => {
         try {
-           const { userId } = req.params;
-           const customer = await UserServiceInstance.findOneUser(Number(userId), 'users', 'uid');
-           res.status(200).send(customer);
+            if (req.user === undefined) {
+                console.log('it is undefined')
+                throw createError(404, 'Not logged in')
+            } else {
+                const user = req.userInfo;
+                if (user.id !== req.user.id) {
+                    throw createError(401, 'Refresh the page should work ;)')
+                } else {
+                    res.status(200).send(user);
+                }
+            }
         } catch(err) {
-           res.status(404).send(err)
+           next(err);
         }
     })
 
     usersRouter.put('/:userId', async (req, res, next) => {
         try {
-           const id = Number(req.params.userId)
-           const customerUpdated = await UserServiceInstance.updateUser(id, req.body, 'users', 'uid');
-           res.status(201).send(customerUpdated);
+            if (req.user === undefined) {
+                throw createError(404, 'Not logged in')
+            } else {
+                const user = req.userInfo;
+                if (user.id !== req.user.id) {
+                    throw createError(401, 'Refresh the page should work ;)')
+                } else {
+                    for (const key in req.body) {
+                        if (req.body[key] === '' || req.body[key] === null || req.body[key] === undefined) {
+                            delete req.body[key]
+                        }
+                    }
+                    const userUpdated = await UserServiceInstance.updateUser(user.id, req.body, 'users', 'id');
+                    res.status(201).send(userUpdated);
+                }
+            }
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
     
     usersRouter.delete('/:userId', async (req, res, next) => {
         try {
-           const id = Number(req.params.userId)
-           await UserServiceInstance.removeUser(id, 'users', 'uid');
-
-            res.status(201).send("User was deleted");
+            if (req.user === undefined) {
+                console.log('it is undefined')
+                throw createError(404, 'Not logged in')
+            } else {
+                const user = req.userInfo;
+                if (user.id !== req.user.id) {
+                    throw createError(401, 'Refresh the page should work ;)')
+                } else {
+                    await UserServiceInstance.removeUser(user.id, 'users', 'id');
+                    res.status(204).send("User was deleted");
+                }
+            }
         } catch(err) {
-            res.status(404).send(err)
+            next(err);
         }
     })
 
-    usersRouter.post('/newadmin', async (req, res, next) => {
+    usersRouter.post('/newadmin', isAdmin, async (req, res, next) => {
         try {
             const { email, password, first_name, last_name } = req.body;
             const salt = await bcrypt.genSalt(10);
@@ -90,13 +126,10 @@ module.exports = (app) => {
                 facebook_id: null
             }
 
-            const response = await UserServiceInstance.newUser(data, 'users')
+            const response = await UserServiceInstance.newUser(data, 'users');
             res.status(201).send(response);
         } catch(err) {
-            res.status(500).send(err)
+            next(err);
         }
     })
 }
-
-// INSERT INTO films (_name, release_year)
-// VALUES ('Monsters, Inc.', 2001);

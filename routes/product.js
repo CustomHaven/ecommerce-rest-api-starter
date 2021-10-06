@@ -1,4 +1,5 @@
 const productRouter = require('express').Router();
+const { isAdmin } = require('../helpers/authHelper');
 const ProductService = require('../services/ProductService');
 const ProductServiceInstance = new ProductService();
 
@@ -18,7 +19,7 @@ module.exports = (app) => {
         }
     });
 
-    productRouter.post('/', async (req, res, next) => {
+    productRouter.post('/', isAdmin, async (req, res, next) => {
         try { // important comment out remember this!!!
             /* For now I will use dealer_product_dpid hard-coded with postman later on
             I will have the dpid from the front end key change Object.key name to
@@ -45,7 +46,7 @@ module.exports = (app) => {
         }
     })
 
-    productRouter.put('/:productId', async (req, res, next) => {
+    productRouter.put('/:productId', isAdmin, async (req, res, next) => {
         try {
             const id = Number(req.params.productId)
             const updatedProduct = await ProductServiceInstance.updateProduct(id, req.body, 'store_products', 'spid');
@@ -55,7 +56,7 @@ module.exports = (app) => {
         }
     })
 
-    productRouter.delete('/:productId', async (req, res, next) => {
+    productRouter.delete('/:productId', isAdmin, async (req, res, next) => {
         try {
            const id = Number(req.params.productId);
            await ProductServiceInstance.removeProduct(id, 'store_products', 'spid');

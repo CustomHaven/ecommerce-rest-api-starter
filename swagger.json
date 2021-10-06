@@ -9,13 +9,247 @@
             "url": "https://choosealicense.com/licenses/mit/"
         }
     },
-    "schema": ["http", "https"],
+    "schema": [
+        "http",
+        "https"
+    ],
     "servers": [
         {
             "url": "http://localhost:4001/"
         }
     ],
+    "security": [
+        {
+            "basicAuth": []
+        }
+    ],
     "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Add new user",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "type": "Successful",
+                        "content": {}
+                    },
+                    "400": {
+                        "type": "Invalid email/password supplied",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Add a new user",
+                "description": "New user",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Add new user",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Register New User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New user added",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login as an administrator to view all the users before you attempted this",
+                "description": "Only an admin can view all users",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All users",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Unathorized",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/users/{userId}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "security": {
+                    "cookieAuth": []
+                },
+                "summary": "Get yourself",
+                "description": "Your details",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1
+                            ]
+                        },
+                        "description": "cookie"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Your details",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "security": {
+                    "cookieAuth": []
+                },
+                "summary": "Update your details",
+                "description": "Update details",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1
+                            ]
+                        },
+                        "description": "cookie"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update your login information",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Update User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "You'r details",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "security": {
+                    "cookieAuth": []
+                },
+                "summary": "Delete your own account yourself",
+                "description": "Delete yourself",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1
+                            ]
+                        },
+                        "description": "cookie"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully deleted your account",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
+        },
         "/dealers": {
             "get": {
                 "tags": [
@@ -82,7 +316,7 @@
                         "description": "Enter a number to find a supplier",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -117,7 +351,7 @@
                         "description": "Enter a number to fetch a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -163,7 +397,7 @@
                         "description": "Enter a number to fetch a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -200,7 +434,7 @@
                         "description": "Enter the name of a supplier",
                         "required": true,
                         "schema": {
-                          "type": "string"
+                            "type": "string"
                         }
                     }
                 ],
@@ -235,7 +469,7 @@
                         "description": "Enter the name of a supplier",
                         "required": true,
                         "schema": {
-                          "type": "string"
+                            "type": "string"
                         }
                     }
                 ],
@@ -283,7 +517,7 @@
                         "description": "Enter the name of a supplier",
                         "required": true,
                         "schema": {
-                          "type": "string"
+                            "type": "string"
                         }
                     },
                     {
@@ -292,7 +526,7 @@
                         "description": "Enter the id of a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -327,7 +561,7 @@
                         "description": "Enter the name of a supplier",
                         "required": true,
                         "schema": {
-                          "type": "string"
+                            "type": "string"
                         }
                     },
                     {
@@ -336,7 +570,7 @@
                         "description": "Enter the id of a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -382,7 +616,7 @@
                         "description": "Enter the name of a supplier",
                         "required": true,
                         "schema": {
-                          "type": "string"
+                            "type": "string"
                         }
                     },
                     {
@@ -391,7 +625,7 @@
                         "description": "Enter the id of a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -481,7 +715,7 @@
                         "description": "Enter a number to fetch a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -516,7 +750,7 @@
                         "description": "Enter a number to fetch a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -562,7 +796,7 @@
                         "description": "Delete a product",
                         "required": true,
                         "schema": {
-                          "type": "integer"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -994,10 +1228,115 @@
                     }
                 }
             }
+        },
+        "/users/newadmin": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Add a new admin user",
+                "description": "New administrator",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Administrator",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Register New User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The new admin successfully joined",
+                        "content": {}
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {}
+                    }
+                }
+            }
         }
     },
     "components": {
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        },
         "schemas": {
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ]
+            },
+            "Register New User": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password",
+                    "first_name",
+                    "last_name"
+                ]
+            },
+            "Update User": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "nullable": false
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "nullable": false
+                    }
+                }
+            },
             "Supplier Info": {
                 "type": "object",
                 "properties": {
@@ -1047,7 +1386,7 @@
                         "type": "integer"
                     },
                     "product_name": {
-                        "type": "string" 
+                        "type": "string"
                     },
                     "type": {
                         "type": "string"
@@ -1079,7 +1418,7 @@
                         "type": "integer"
                     },
                     "product_name": {
-                        "type": "string" 
+                        "type": "string"
                     },
                     "type": {
                         "type": "string"

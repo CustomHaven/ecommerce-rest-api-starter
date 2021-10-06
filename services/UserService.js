@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const CrudModel = require('../models/CrudModel');
 const CrudModelInstance = new CrudModel();
+const bcrypt = require('bcryptjs');
 
 module.exports = class UserService {
 
@@ -22,11 +23,11 @@ module.exports = class UserService {
 
     async findOneUser(id, tableName, idName) {
         try {
-            const user = await CrudModelInstance.findOne(id, tableName, idName);
-
-            if (!user) {
+            const users = await CrudModelInstance.findOne(id, tableName, idName);
+            if (!users) {
                 throw createError(404, 'User not found');
             }
+            const [user] = users;
 
             return user;
             
@@ -48,6 +49,11 @@ module.exports = class UserService {
     }
     async updateUser(id, col, tableName, idName) {
         try {
+            if (col.password) {
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(col.password, salt);
+                col.password = hash;
+            }
             const user = await CrudModelInstance.updateRow(id, col, tableName, idName);
 
             if (!user) {

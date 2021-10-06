@@ -5,7 +5,10 @@ const sessDeleteJob = require('./CronJobHelper');
 const sessionHelper = async (req, res, next) => {
   try {
     const findSession = await AuthServiceInstance.sessID({ id: req.sessionID });
-    if (!findSession.message) {
+    console.log('findSession')
+    console.log(findSession)
+    console.log('findSession')
+    if (findSession === null) {
       if (findSession.expire !== undefined) {
         const time = new Date(findSession.expire);
         const newObject = {
@@ -16,12 +19,13 @@ const sessionHelper = async (req, res, next) => {
         next();
       }
     } else {
-      console.log(findSession.message)
-      Error({ message: findSession.message })
+      console.log('findSession.message')
+      // Error({ message: findSession.message })
+      // res.redirect('/auth/home')
       next()
     }
-  } catch (error) {
-    return error.message // how do i make it call here with the error message?
+  } catch (err) {
+    next(err) // how do i make it call here with the error message?
   }
 }
 

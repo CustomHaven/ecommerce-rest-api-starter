@@ -48,8 +48,14 @@
             <% } else { %>
                 <li><a href="/auth/login">Login</a></li>
             <% } %>
+            
             <li><a href="/auth/home">Homepage</a></li>
-            <li><a href="/auth/profile">Profile</a></li>
+
+            <% if (user?.is_admin) { %>
+                <li><a href="/auth/admin">Admin</a></li>
+            <% } else { %>
+                <li><a href="/auth/profile">Profile</a></li>
+            <% } %>
         </ul>
     </nav>
     <header>
