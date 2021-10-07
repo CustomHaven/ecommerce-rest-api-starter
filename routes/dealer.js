@@ -1,7 +1,9 @@
 const dealersRouter = require('express').Router();
 const { isAdmin } = require('../helpers/authHelper');
+const logger = require('../logger');
 const DealerService = require('../services/DealerService');
 const DealerServiceInstance = new DealerService();
+const logger = require('../logger');
 
 module.exports = (app) => {
     app.use('/dealers', dealersRouter);
@@ -9,6 +11,8 @@ module.exports = (app) => {
     dealersRouter.get('/', async (req, res, next) => {
 
         try {
+            logger.info('info dealer')
+            logger.error('error on dealer')
             const response = await DealerServiceInstance.allDealers('dealers');
             res.status(200).send(response);
         } catch(err) {

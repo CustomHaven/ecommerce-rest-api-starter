@@ -2,6 +2,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const AuthService = require('../services/AuthService');
 const AuthServiceInstance = new AuthService();
+const logger = require('../logger');
 
 module.exports = (app) => {
 
@@ -27,6 +28,11 @@ module.exports = (app) => {
     passport.use(new LocalStrategy(
         async (username, password, done) => {
             try {
+                logger.info('we are in passport')
+                logger.info(username)
+                logger.info('we are in passport')
+                logger.info(password)
+                logger.info('we are in passport')
                 const user = await AuthServiceInstance.localLogin({ email: username, password });
 
                 if (user.message === 'Incorrect email.') {
