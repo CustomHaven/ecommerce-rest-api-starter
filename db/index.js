@@ -18,8 +18,8 @@ const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : proCo
 
 
 module.exports = {
-  // query: (text, params) => {
-  //   return pool.query(text, params)
-  // },
+  query: (text, params) => {
+    return pool.query(text, params)
+  },
   pool: pool
 }
