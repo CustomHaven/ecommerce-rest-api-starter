@@ -11,8 +11,6 @@ const logger = require('../logger');
 // console.log(require('crypto').randomBytes(64).toString('hex'));
 module.exports = (app) => {
 
-    const IN_PROD = process.env.NODE_ENV === 'production';
-
     app.set('view engine', 'ejs');
 
     app.use(morgan('dev'));
@@ -34,7 +32,7 @@ module.exports = (app) => {
         }),
         cookie: {
             maxAge: 1000 * 60 * 3,
-            secure: IN_PROD,
+            secure: process.env.NODE_ENV ? true : false,
             sameSite: true
         }
     }));
