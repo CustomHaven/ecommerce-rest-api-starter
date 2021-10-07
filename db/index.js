@@ -14,12 +14,12 @@ const proConfig = {
 }
 
 
-const pool = new Pool(NODE_ENV === 'production' ? proConfig : devConfig)
+const pool = new Pool(process.env.NODE_ENV === 'development' ? devConfig : proConfig)
 
 
 module.exports = {
-  query: (text, params) => {
-    return pool.query(text, params)
-  },
-  // pool: pool
+  // query: (text, params) => {
+  //   return pool.query(text, params)
+  // },
+  pool: pool
 }
