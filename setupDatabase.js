@@ -28,7 +28,7 @@ const { DB } = require('./config');
             product_name varchar(100),
             type varchar(50),
             description text,
-            price money,
+            price numeric,
             quantity integer
         );
     `
@@ -39,7 +39,7 @@ const { DB } = require('./config');
             product_name varchar(100),
             type varchar(50),
             description text,
-            price money,
+            price numeric,
             quantity integer
         );
     `
@@ -61,7 +61,6 @@ const { DB } = require('./config');
         CREATE TABLE IF NOT EXISTS order_list (
             customers_cid integer REFERENCES customers (cid),
             store_products_spid integer REFERENCES store_products (spid),
-            PRIMARY KEY (customers_cid, store_products_spid),
             quantity integer,
             order_date date
         );
@@ -72,19 +71,37 @@ const { DB } = require('./config');
             oid integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
             customers_cid integer REFERENCES customers (cid),
             status_completed boolean,
-            created_at date,
-            final_price money
+            created_at timestamp,
+            final_price numeric
         );
     `
 
     const session = `
-        CREATE TABLE IF NOT EXISTS session (
-            id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-            session_id VARCHAR(255),
-            expire date
-        );
+        CREATE TABLE "session" (
+            "sid" varchar NOT NULL COLLATE "default",
+            "sess" json NOT NULL,
+            "expire" timestamp(6) NOT NULL
+        )
+        WITH (OIDS=FALSE);
     `
 
+    const alterSession = `
+        ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+    `
+
+    const indexSession = `
+        CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+    `
+
+    const orderListTime = `
+        ALTER TABLE order_list
+        ALTER COLUMN order_date TYPE timestamp(0) USING order_date::timestamp(0);
+    `
+
+    const orderTime = `
+        ALTER TABLE order_list
+        ALTER COLUMN order_date TYPE timestamp(0) USING order_date::timestamp(0);
+    `
 
     try {
         const db = new Client({
@@ -106,6 +123,12 @@ const { DB } = require('./config');
         await db.query(customers);
         await db.query(order_list);
         await db.query(orders);
+
+        await db.query(alterSession);
+        await db.query(indexSession);
+
+        await db.query(orderListTime);
+        await db.query(orderTime);
 
         // const userAdd = `
         //     ALTER TABLE users
