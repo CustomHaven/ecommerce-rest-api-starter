@@ -3,7 +3,7 @@ const app = express();
 
 const loaders = require('./loaders');
 
-const { PORT } = require('./config');
+const PORT = process.env.PORT || 4001;
 
 
 async function startServer () {
