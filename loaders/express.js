@@ -17,11 +17,6 @@ module.exports = (app) => {
 
     app.use(cors());
 
-    console.log('express')
-    console.log(process.env.NODE_ENV)
-    console.log('express')
-
-
     app.use(bodyParser.json());
 
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,7 +31,7 @@ module.exports = (app) => {
             // tableName: 'session'
         }),
         cookie: {
-            maxAge: 1000 * 60 * 3,
+            maxAge: 1000 * 60 * 60,
             secure: process.env.NODE_ENV ? true : false,
             sameSite: true
         }

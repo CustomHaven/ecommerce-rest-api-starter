@@ -18,12 +18,6 @@ const proConfig = {
   }
 }
 
-logger.info('started server in the index.js file off db');
-logger.info(process.env.NODE_ENV);
-logger.info(process.env.NODE_ENV);
-logger.info(process.env.NODE_ENV);
-logger.info('started server in the index.js file off db');
-
 const pool = new Pool(process.env.NODE_ENV ? proConfig : devConfig)
 
 
