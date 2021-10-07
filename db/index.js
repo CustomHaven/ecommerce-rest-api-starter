@@ -12,7 +12,10 @@ const devConfig = {
 }
 
 const proConfig = {
-  connectionString: DB.DATABASE
+  connectionString: DB.DATABASE,
+  ssl: {
+    rejectUnauthorized: false
+  }
 }
 
 logger.info('started server in the index.js file off db');
