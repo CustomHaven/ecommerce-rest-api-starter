@@ -37,7 +37,7 @@ module.exports = (app) => {
         }),
         cookie: {
             maxAge: 1000 * 60 * 3,
-            secure: process.env.NODE_ENV ? true : false,
+            // secure: process.env.NODE_ENV ? true : false,
             sameSite: true
         }
     }));
