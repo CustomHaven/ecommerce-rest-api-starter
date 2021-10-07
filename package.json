@@ -11,7 +11,7 @@
     "dev": "nodemon -r dotenv/config server.js",
     "test": "mocha test/test.js",
     "create-db": "node -r dotenv/config setupDatabase",
-    "start": "cross-env NODE_ENV=production node server.js"
+    "start": "dotenv NODE_ENV=production node server.js"
   },
   "author": "",
   "license": "ISC",
