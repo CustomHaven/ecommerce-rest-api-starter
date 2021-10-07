@@ -1,3 +1,6 @@
 .env
 /node_modules
 note.txt
+mockerooInsert.sql
+init.sql
+db.txt
