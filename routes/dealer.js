@@ -6,7 +6,7 @@ const DealerServiceInstance = new DealerService();
 module.exports = (app) => {
     app.use('/dealers', dealersRouter);
     /// SUpplier bits
-    dealersRouter.get('/', isAdmin, async (req, res, next) => {
+    dealersRouter.get('/', async (req, res, next) => {
 
         try {
             const response = await DealerServiceInstance.allDealers('dealers');
