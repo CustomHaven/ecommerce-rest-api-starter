@@ -17,6 +17,10 @@ module.exports = (app) => {
 
     app.use(cors());
 
+    logger.info('process.env.NODE_ENV')
+    logger.info(process.env.NODE_ENV)
+    logger.info('process.env.NODE_ENV')
+
     app.use(bodyParser.json());
 
     app.use(bodyParser.urlencoded({ extended: true }));
