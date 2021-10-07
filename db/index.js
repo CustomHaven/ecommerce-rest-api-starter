@@ -14,11 +14,11 @@ const proConfig = {
   connectionString: DB.DATABASE
 }
 
-logger.info('started server in the index.js file off db');
+logger.info('started server in the index.js db');
 logger.info(NODE_ENV);
 logger.info(NODE_ENV);
 logger.info(NODE_ENV);
-logger.info('started server in the index.js file off db');
+logger.info('started server in the index.js db');
 
 const pool = new Pool(NODE_ENV === 'development' ? devConfig : proConfig)
 
