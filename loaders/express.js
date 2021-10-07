@@ -17,9 +17,9 @@ module.exports = (app) => {
 
     app.use(cors());
 
-    console.log('process.env.NODE_ENVS')
+    console.log('process.env.NODE_ENV')
     console.log(process.env.NODE_ENV)
-    console.log('process.env.NODE_ENVS')
+    console.log('process.env.NODE_ENV')
 
     app.use(bodyParser.json());
 
