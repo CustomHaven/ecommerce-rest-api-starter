@@ -32,8 +32,8 @@ module.exports = (app) => {
         saveUninitialized: false,
         resave: false,
         store: new pgSession({
-            pool: db.pool,
-            tableName: 'session'
+            pool: db
+            // tableName: 'session'
         }),
         cookie: {
             maxAge: 1000 * 60 * 3,
