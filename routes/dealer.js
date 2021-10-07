@@ -3,7 +3,6 @@ const { isAdmin } = require('../helpers/authHelper');
 const logger = require('../logger');
 const DealerService = require('../services/DealerService');
 const DealerServiceInstance = new DealerService();
-const logger = require('../logger');
 
 module.exports = (app) => {
     app.use('/dealers', dealersRouter);
