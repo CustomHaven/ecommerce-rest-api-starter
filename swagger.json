@@ -138,7 +138,7 @@
                         "schema": {
                             "type": "integer",
                             "enum": [
-                                1
+                                6
                             ]
                         },
                         "description": "cookie"
@@ -179,7 +179,7 @@
                         "schema": {
                             "type": "integer",
                             "enum": [
-                                1
+                                6
                             ]
                         },
                         "description": "cookie"
@@ -231,7 +231,7 @@
                         "schema": {
                             "type": "integer",
                             "enum": [
-                                1
+                                6
                             ]
                         },
                         "description": "cookie"

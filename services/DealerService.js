@@ -1,11 +1,13 @@
 const createError = require('http-errors');
 const CrudModel = require('../models/CrudModel');
 const CrudModelInstance = new CrudModel();
+const logger = require('../logger');
 
 module.exports = class DealerService {
 
     async allDealers(tableName) {
         try {
+            logger.info('alldealers')
             const results = await CrudModelInstance.getAll(tableName);
             return results;
         } catch(err) {

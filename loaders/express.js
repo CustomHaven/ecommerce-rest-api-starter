@@ -6,6 +6,7 @@ const { SESS } = require('../config');
 const db = require('../db');
 const pgSession = require('connect-pg-simple')(session); // bring this back
 const flash = require('connect-flash');
+const logger = require('../logger');
 
 // console.log(require('crypto').randomBytes(64).toString('hex'));
 module.exports = (app) => {
