@@ -2,6 +2,7 @@ const expressLoader = require('./express');
 const routeLoader = require('../routes'); //do routes
 const passportLoader = require('./passport');
 const swaggerLoader = require('./swagger');
+const logger = require('../logger');
 
 module.exports = async (app) => {
 
@@ -19,6 +20,8 @@ module.exports = async (app) => {
     // Error Handler
     app.use((err, req, res, next) => {
         const { message, status } = err;
+        logger.http(status);
+        logger.error(message)
         return res.status(status).send({ message });
     });
 }

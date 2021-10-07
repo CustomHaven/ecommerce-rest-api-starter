@@ -1,9 +1,17 @@
 const express = require('express');
 const app = express();
-
+const logger = require('./logger');
 const loaders = require('./loaders');
 
 const PORT = process.env.PORT || 4001;
+
+// logger.warn('warn information');
+// logger.info('info information');
+// logger.error('error information');
+// logger.http('http information');
+// logger.verbose('verbose information');
+// logger.debug('debug information');
+// logger.error(new Error('Something broke!'));
 
 
 async function startServer () {
@@ -13,7 +21,7 @@ async function startServer () {
 
 
     app.listen(PORT, () => {
-        console.log(`Server is listening on port #${PORT}`);
+        logger.info(`Server is listening on port #${PORT}`);
     });//
 
 }
