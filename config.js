@@ -7,7 +7,8 @@ module.exports = {
         PGUSER: process.env.PGUSER,
         PGDATABASE: process.env.PGDATABASE,
         PGPASSWORD: process.env.PGPASSWORD,
-        PGPORT: process.env.PGPORT
+        PGPORT: process.env.PGPORT,
+        DATABASE: process.env.DATABASE_URL
     },
     EMAIL: {
         ESERVICE: process.env.MAIL_SERVICE,

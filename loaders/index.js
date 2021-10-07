@@ -13,6 +13,9 @@ module.exports = async (app) => {
 
     await swaggerLoader(app);
 
+    app.get('*', (req, res) => {
+        res.redirect('/auth/login');
+    })
     // Error Handler
     app.use((err, req, res, next) => {
         const { message, status } = err;
