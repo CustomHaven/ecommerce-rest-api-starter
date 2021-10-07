@@ -15,22 +15,3 @@ const priceHelper = (obj, table1, table2, colname) => {
 };
 
 module.exports = priceHelper;
-
-// const priceFinalObj = {
-//     quantity: 20,
-//     price: 20,
-//     store_products_spid: 6,
-//     spid: 6,
-//     customers_cid: 3,
-//     order_date: '2021-09-03 20:22:33',
-//     upper: upperBound,
-//     lower: lowerBound
-// }
-
-
-`SELECT SUM(order_list.quantity * store_products.price)
-FROM order_list
-JOIN store_products
-ON  order_list.store_products_spid = store_products.spid
-WHERE order_list.order_date = '2021-09-03 20:22:33'
-AND order_list.customers_cid = 3)`

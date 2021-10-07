@@ -11,8 +11,6 @@ module.exports = (app) => {
 
     // Set method to serialize data to store in cookie
     passport.serializeUser((user, done) => {
-        
-        console.log(" we are making the OBJECT in serialize USer")
         done(null, user.id)
     })
 
@@ -29,18 +27,11 @@ module.exports = (app) => {
     passport.use(new LocalStrategy(
         async (username, password, done) => {
             try {
-                console.log('helo passport')
                 const user = await AuthServiceInstance.localLogin({ email: username, password });
-                console.log('local')
+
                 if (user.message === 'Incorrect email.') {
-                    console.log(typeof user.message)
-                    console.log(user.message)
-                    console.log('local username')
                     return done(null, false, user.message)
                 } else if (user.message === 'Incorrect password.') {
-                    console.log(typeof user.message)
-                    console.log(user.message)
-                    console.log('local password')
                     return done(null, false, user.message)
                 } else {
                     done(null, user)

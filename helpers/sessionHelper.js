@@ -2,12 +2,10 @@ const AuthService = require('../services/AuthService');
 const AuthServiceInstance = new AuthService();
 const sessDeleteJob = require('./CronJobHelper');
 
+// dont think i am using this sessionHelper prehaps do delete the file
 const sessionHelper = async (req, res, next) => {
   try {
     const findSession = await AuthServiceInstance.sessID({ id: req.sessionID });
-    console.log('findSession')
-    console.log(findSession)
-    console.log('findSession')
     if (findSession === null) {
       if (findSession.expire !== undefined) {
         const time = new Date(findSession.expire);
@@ -19,7 +17,6 @@ const sessionHelper = async (req, res, next) => {
         next();
       }
     } else {
-      console.log('findSession.message')
       // Error({ message: findSession.message })
       // res.redirect('/auth/home')
       next()

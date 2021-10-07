@@ -33,6 +33,7 @@ module.exports = app => {
     ordersRouter.param('orderId', async (req, res, next, orderId) => {
                 // To is best to loop list of email names if i want to send the same email to loads of ppl
         // without them seeing other people's email
+        // person will be returned as an object to make it easier for ourself to work with what we have below
         const person = await OrderServiceInstance.findAnOrder(Number(orderId), 'orders', 'oid');
         req.order = person.order;
         req.person = person.customer;

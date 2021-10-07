@@ -38,7 +38,6 @@ module.exports = (app) => {
     productRouter.get('/:productId', async (req, res, next) => {
         try {
            const { productId } = req.params;
-           console.log(Number(productId))
            const product = await ProductServiceInstance.oneProduct(Number(productId), 'store_products', 'spid');
            res.status(200).send(product);
         } catch(err) {

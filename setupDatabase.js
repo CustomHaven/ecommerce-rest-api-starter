@@ -130,14 +130,6 @@ const { DB } = require('./config');
         await db.query(orderListTime);
         await db.query(orderTime);
 
-        // const userAdd = `
-        //     ALTER TABLE users
-        //     ADD COLUMN google_id varchar(255),
-        //     ADD COLUMN facebook_id varchar(255);     
-        // `
-
-        // await db.query(userAdd);
-
         await db.end();
 
     } catch(err) {

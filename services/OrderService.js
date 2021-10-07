@@ -3,20 +3,8 @@ const moment = require('moment');
 const CrudModel = require('../models/CrudModel');
 const CrudModelInstance = new CrudModel();
 const OLService = require('./OLService');
-const { EMAIL } = require('../config');
-const nodemailer = require('nodemailer');
 
 module.exports = class OrderService {
-
-     constructor() {
-        this.transport = nodemailer.createTransport({
-            service: EMAIL.ESERVICE,
-            auth: {
-                user: EMAIL.EUSER,
-                pass: EMAIL.EPASSWORD
-            }
-        })
-    }
 
     static upper(date) {
         const copy = date;

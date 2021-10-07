@@ -20,7 +20,6 @@ module.exports = (app) => {
 
     customersRouter.post('/', async (req, res, next) => {
         try {
-            console.log("welcome!")
             const response = await CustomerServiceInstance.makeNewCustomer(req.body, 'customers')
             res.status(201).send(response);
         } catch(err) {

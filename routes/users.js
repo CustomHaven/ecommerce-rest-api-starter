@@ -53,7 +53,6 @@ module.exports = (app) => {
     usersRouter.get('/:userId', async (req, res, next) => {
         try {
             if (req.user === undefined) {
-                console.log('it is undefined')
                 throw createError(404, 'Not logged in')
             } else {
                 const user = req.userInfo;
@@ -94,7 +93,6 @@ module.exports = (app) => {
     usersRouter.delete('/:userId', async (req, res, next) => {
         try {
             if (req.user === undefined) {
-                console.log('it is undefined')
                 throw createError(404, 'Not logged in')
             } else {
                 const user = req.userInfo;
@@ -115,7 +113,6 @@ module.exports = (app) => {
             const { email, password, first_name, last_name } = req.body;
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
-            console.log(hash)
             const data = {
                 email, 
                 password: hash, 

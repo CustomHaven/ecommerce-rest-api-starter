@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const db = require('../db');
 const moment = require('moment');
 const updateHelper = require('../helpers/updateHelper');
@@ -142,8 +141,6 @@ module.exports = class CrudModel {
 
     async getBasedOnDate(tableName, colName, date) {
         try {
-            console.log(this.date)
-            console.log(typeof this.date)
 
             const result = await db.query(`SELECT * FROM ${tableName} 
                                         WHERE ${colName} = $1`, [date]);
@@ -219,11 +216,11 @@ module.exports = class CrudModel {
     async selectPrice(obj, table1, table2, colname, columns) {
         try {
             const price = priceHelper(obj, table1, table2, colname)
-            // console.log(price)
+
             const colValues = Object.values(columns)
-            // console.log(colValues)
+
             const result = await db.query(price, colValues);
-            // console.log(result)
+
             if (result?.rows?.length) {
                 if (result?.rows[0]?.sum !== null) {
                     return result?.rows[0]?.sum

@@ -44,11 +44,7 @@ module.exports = class AuthService {
         try {
             const { id } = data;
             const sessions = await CrudModelInstance.findOne(id, 'session', 'sid');
-            console.log('session id')
-            console.log(sessions)
-            console.log('session id')
             if (!sessions) {
-                console.log('WRONG NULL')
                 throw createError(404, 'No session found!'); // placed throw err in catch so i can do false
                 // return null
             }

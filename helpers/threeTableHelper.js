@@ -19,10 +19,3 @@ const threeTableHelper = (col, table) => {
 };
 
 module.exports = threeTableHelper;
-
-
-
-// Upperlower123
-
-
-"SELECT store_products.product_name,  SUM(store_products.price * order_list.quantity) FROM store_products JOIN order_list ON order_list.store_products_spid = store_products.spid JOIN customers ON order_list.customers_cid = customers.cid WHERE order_list.customers_cid = 32 AND order_list.order_date < '2021-10-03 19:09:34' AND order_list.order_date > '2021-10-03 19:03:34' GROUP BY 1"
