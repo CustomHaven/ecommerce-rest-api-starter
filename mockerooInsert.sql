@@ -46,6 +46,13 @@ FROM
 WHERE
   table_name IN ('dealer_products');
 
+SELECT
+  constraint_name, table_name, column_name
+FROM
+  information_schema.key_column_usage
+WHERE
+  table_name IN ('dealer_products', 'customers', 'dealers', 'order_list', 'orders', 'session', 'store_products', 'users');
+
 UPDATE dealer_products
 SET dealers_did = 4
 WHERE dpid = 1;
