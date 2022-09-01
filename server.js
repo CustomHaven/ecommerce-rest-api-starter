@@ -19,6 +19,11 @@ async function startServer () {
     // app.use(express.static(__dirname + '/public'));
     loaders(app);
 
+    console.log("process.env.NODE_ENV");
+    console.log(process.env.NODE_ENV);
+    console.log("process.env.NODE_ENV");
+
+
 
     app.listen(PORT, () => {
         if (process.env.NODE_ENV === "development") {
