@@ -3,7 +3,7 @@ const router = require('express').Router();
 const TableService = require('../../services/TableService');
 const TableServiceInstance = new TableService();
 const { isAdmin, limitIDAccess, authenticationMiddleware } = require('../../helpers/authHelper');
-const stripe = require('stripe')(PAYMENT.SECRET);
+const stripe = require('stripe')(PAYMENT.STRIPE_SECRET);
 
 
 
@@ -43,7 +43,7 @@ module.exports = (app) => {
     });
 
     router.get("/publish-key", authenticationMiddleware, (req, res) => {
-        res.status(200).json({ publishKey: PAYMENT.PUBLIC });
+        res.status(200).json({ publishKey: PAYMENT.STRIPE_PUBLIC });
     });
 
     router.post("/create-payment-intent", authenticationMiddleware, async (req, res) => {
