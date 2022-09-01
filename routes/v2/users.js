@@ -118,7 +118,7 @@ module.exports = (app) => {
         }
     });
 
-    router.post('/newadmin', async (req, res, next) => {
+    router.post('/newadmin', isAdmin, async (req, res, next) => {
         try {
             const { email, password, first_name, last_name } = req.body;
             const salt = await bcrypt.genSalt(10);
