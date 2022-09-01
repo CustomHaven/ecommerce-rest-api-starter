@@ -5,6 +5,21 @@ const bcrypt = require('bcryptjs');
 
 module.exports = class UserService {
 
+    async table(tablename) {
+        try {
+            const theTable = await CrudModelInstance.tableSize(tablename);
+
+            if (!theTable) {
+                throw createError(500, "No table in server");
+            }
+
+            return theTable;
+
+        } catch (err) {
+            throw err;
+        }
+    }
+
     async allUsers(tableName) {
         try {
 

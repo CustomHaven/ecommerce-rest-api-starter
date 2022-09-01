@@ -1,7 +1,9 @@
+// // DEPRECATED ROUTES
+
 const dealersRouter = require('express').Router();
-const { isAdmin } = require('../helpers/authHelper');
-const logger = require('../logger');
-const DealerService = require('../services/DealerService');
+const { isAdmin } = require('../../helpers/authHelper');
+const logger = require('../../logger');
+const DealerService = require('../../services/DealerService');
 const DealerServiceInstance = new DealerService();
 
 module.exports = (app) => {

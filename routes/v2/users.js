@@ -1,16 +1,18 @@
-const usersRouter = require('express').Router();
-const UserService = require('../services/UserService');
+const router = require('express').Router();
+const UserService = require('../../services/UserService');
 const UserServiceInstance = new UserService();
 const bcrypt = require('bcryptjs');
-const { isAdmin } = require('../helpers/authHelper');
+const { isAdmin, limitIDAccess, authenticationMiddleware } = require('../../helpers/authHelper');
 const createError = require('http-errors');
 
 module.exports = (app) => {
-    app.use('/users', usersRouter);
+    app.use('/v2/users', router);
 
-    usersRouter.param('userId', async (req, res, next, userId) => {
+    router.param('id', async (req, res, next) => {
         try {
-            const user = await UserServiceInstance.findOneUser(Number(userId), 'users', 'id');
+            const user = await UserServiceInstance.findOneUser(req.params.id, 'users', 'id');
+            
+            limitIDAccess(user, req.user);
             req.userInfo = user;
             next();
         } catch (err) {
@@ -18,7 +20,7 @@ module.exports = (app) => {
         }
     })
 
-    usersRouter.get('/', isAdmin, async (req, res, next) => {
+    router.get('/', isAdmin, async (req, res, next) => { // add isAdmin
         try {
             const response = await UserServiceInstance.allUsers('users');
 
@@ -29,17 +31,17 @@ module.exports = (app) => {
     
     })
 
-    usersRouter.post('/', async (req, res, next) => {
+    router.post('/', async (req, res, next) => {
         try {
             const { email, password, first_name, last_name } = req.body;
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
             const data = {
+                is_admin: false,
+                first_name: first_name.toLowerCase(), 
+                last_name: last_name.toLowerCase(), 
                 email: email.toLowerCase(), 
                 password: hash,
-                first_name, 
-                last_name, 
-                is_admin: false,
                 google_id: null,
                 facebook_id: null
             }
@@ -50,37 +52,44 @@ module.exports = (app) => {
         }
     })
 
-    usersRouter.get('/:userId', async (req, res, next) => {
+
+    router.get('/:id', authenticationMiddleware, async (req, res, next) => {
         try {
-            if (req.user === undefined) {
+            if (req.userInfo === undefined) {
                 throw createError(404, 'Not logged in')
             } else {
                 const user = req.userInfo;
-                if (user.id !== req.user.id) {
+                if (user.id !== req.userInfo.id) {
                     throw createError(401, 'Refresh the page should work ;)')
                 } else {
                     res.status(200).send(user);
                 }
             }
         } catch(err) {
-           next(err);
+            next(err);
         }
     })
 
-    usersRouter.put('/:userId', async (req, res, next) => {
+    router.put('/:id', authenticationMiddleware, async (req, res, next) => {
         try {
-            if (req.user === undefined) {
+            if (req.userInfo === undefined) {
                 throw createError(404, 'Not logged in')
             } else {
                 const user = req.userInfo;
-                if (user.id !== req.user.id) {
+                if (user.id !== req.userInfo.id) {
                     throw createError(401, 'Refresh the page should work ;)')
                 } else {
                     for (const key in req.body) {
                         if (req.body[key] === '' || req.body[key] === null || req.body[key] === undefined) {
                             delete req.body[key]
+                        } else {
+                            if (typeof req.body[key] === "string") {
+                                req.body[key] = req.body[key]?.toLowerCase();
+                            }
                         }
                     }
+                    req.body.modified = 'NOW()';
+
                     const userUpdated = await UserServiceInstance.updateUser(user.id, req.body, 'users', 'id');
                     res.status(201).send(userUpdated);
                 }
@@ -90,34 +99,35 @@ module.exports = (app) => {
         }
     })
     
-    usersRouter.delete('/:userId', async (req, res, next) => {
+    router.delete('/:id', authenticationMiddleware, async (req, res, next) => {
         try {
-            if (req.user === undefined) {
+            if (req.userInfo === undefined) {
                 throw createError(404, 'Not logged in')
             } else {
                 const user = req.userInfo;
-                if (user.id !== req.user.id) {
+                if (user.id !== req.userInfo.id) {
                     throw createError(401, 'Refresh the page should work ;)')
                 } else {
-                    await UserServiceInstance.removeUser(user.id, 'users', 'id');
+                    const result = await UserServiceInstance.removeUser(user.id, 'users', 'id');
+
                     res.status(204).send("User was deleted");
                 }
             }
         } catch(err) {
             next(err);
         }
-    })
+    });
 
-    usersRouter.post('/newadmin', isAdmin, async (req, res, next) => {
+    router.post('/newadmin', async (req, res, next) => {
         try {
             const { email, password, first_name, last_name } = req.body;
             const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash(password, salt)
+            const hash = await bcrypt.hash(password, salt);
             const data = {
-                email, 
+                email: email.toLowerCase(), 
                 password: hash, 
-                first_name, 
-                last_name, 
+                first_name: first_name.toLowerCase(), 
+                last_name: last_name.toLowerCase(), 
                 is_admin: true,
                 google_id: null,
                 facebook_id: null
@@ -128,5 +138,5 @@ module.exports = (app) => {
         } catch(err) {
             next(err);
         }
-    })
+    });
 }

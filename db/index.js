@@ -1,6 +1,5 @@
 const { Pool } = require('pg');
-const { DB, NODE_ENV } = require('../config');
-const logger = require('../logger');
+const { DB } = require('../config');
 // require('dotenv').config();
 
 const devConfig = {
@@ -8,7 +7,7 @@ const devConfig = {
   user: DB.PGUSER,
   database: DB.PGDATABASE,
   password: DB.PGPASSWORD,
-  port: DB.PGPORT
+  port: DB.PGPORT,
 }
 
 const proConfig = {
@@ -18,12 +17,16 @@ const proConfig = {
   }
 }
 
-const pool = new Pool(process.env.NODE_ENV ? proConfig : devConfig)
 
+const pool = new Pool(process.env.NODE_ENV !== "development" ? proConfig : devConfig);
+// pool
+// .connect()
+// .then(() => console.log("connected to database"))
+// .catch((err) => console.error("Something wrong in connection:", err));
 
 module.exports = {
   query: (text, params) => {
     return pool.query(text, params)
   },
-  // pool: pool
+  pool: pool.connect().then(() => console.log("Connected to Database")).catch((err) => console.log("Something went wrong:", err)) // to much..
 }

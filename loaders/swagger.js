@@ -1,6 +1,6 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../swagger.json');
+const swaggerDocument = require('../swaggerv2.json');
 // const basicAuth = require('express-basic-auth');
 
 const options = {

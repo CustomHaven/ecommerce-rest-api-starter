@@ -18,5 +18,9 @@ module.exports = {
         SECRET: process.env.SESSION_SECRET,
         NAME: process.env.SESSION_NAME
     },
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
+    PAYMENT: {
+        SECRET: process.env.NODE_ENV === "development" ? process.env.SKTEST : process.env.SKLIVE,
+        PUBLIC: process.env.NODE_ENV === "development" ? process.env.PKTEST : process.env.PKLIVE
+    }
 }

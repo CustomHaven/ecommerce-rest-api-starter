@@ -1,3 +1,5 @@
+// DEPRECATED ROUTES
+
 const orderListRouter = require('express').Router();
 const OLService = require('../services/OLService');
 const OLServiceInstance = new OLService();

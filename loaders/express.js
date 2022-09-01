@@ -15,7 +15,13 @@ module.exports = (app) => {
 
     app.use(morgan('dev'));
 
-    app.use(cors());
+    const corsOptions = {
+        origin: ["https://rest-api-no-orm.herokuapp.com/", "http://localhost:4001/"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        optionsSuccessStatus: 200
+    };
+
+    app.use(cors(corsOptions));
 
     logger.info('process.env.NODE_ENV')
     logger.info(process.env.NODE_ENV)

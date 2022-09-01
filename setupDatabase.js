@@ -2,11 +2,15 @@ const { Client } = require('pg');
 const { DB } = require('./config');
 
 (async () => {
+    const userSequence = `
+        CREATE SEQUENCE IF NOT EXISTS user_seq
+        INCREMENT 1;
+    `
     const users = `
         CREATE TABLE IF NOT EXISTS users (
-            id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
+            id TEXT PRIMARY KEY NOT NULL DEFAULT concat_ws(' ', 'user', nextval('user_seq')),
             email varchar(50) UNIQUE,      
-            password text,
+            password text NOT NULL,
             is_admin boolean,
             first_name varchar(50),
             last_name varchar(50),
@@ -51,7 +55,7 @@ const { DB } = require('./config');
             last_name varchar(50),
             address varchar(100),
             zip_code varchar(25),
-            city varchar(50)
+            city varchar(50),
             country varchar(50),
             email varchar(50) NOT NULL
         );
@@ -77,7 +81,7 @@ const { DB } = require('./config');
     `
 
     const session = `
-        CREATE TABLE "session" (
+        CREATE TABLE IF NOT EXISTS session (
             "sid" varchar NOT NULL COLLATE "default",
             "sess" json NOT NULL,
             "expire" timestamp(6) NOT NULL
@@ -115,6 +119,7 @@ const { DB } = require('./config');
         await db.connect();
 
         // Creating tables on database
+        await db.query(userSequence);
         await db.query(session);
         await db.query(users);
         await db.query(dealers);
@@ -136,3 +141,12 @@ const { DB } = require('./config');
         console.log("ERROR CREATING ONE OR MORE TABLES: ", err)
     }
 })();
+
+
+
+/*
+
+INSERT INTO users (email, password, is_admin, first_name, last_name, google_id, facebook_id)
+VALUES ('rihan@email.com', 'ri123', false, 'ri', 'mo', 'googleid', 'facebookid');
+
+*/

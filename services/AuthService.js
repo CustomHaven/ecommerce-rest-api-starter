@@ -9,16 +9,19 @@ module.exports = class AuthService {
         try {
             const { email, password } = data;
             const users = await CrudModelInstance.findOneByEmail(email, 'users', 'email');
-
             if (!users) {
-                throw createError(404, 'Incorrect email.', { expose: true });
+                throw createError(404, 'Incorrect email.');
             } else {
-                const [user] = users
-                const similarPassword = await bycrypt.compare(password, user.password);
-                if (!similarPassword) {
-                    throw createError(401, 'Incorrect password.', { expose: true });
-                } else {
+                const [user] = users;
+                if (user.password === password) {
                     return user;
+                } else {
+                    const similarPassword = await bycrypt.compare(password, user.password);
+                    if (!similarPassword) {
+                        throw createError(401, 'Incorrect password.'); // remove these exposures
+                    } else {
+                        return user;
+                    }
                 }
             }
         } catch (err) {
@@ -30,7 +33,7 @@ module.exports = class AuthService {
     async loginId(data) {
         try {
             const { id } = data;
-            const [user]= await CrudModelInstance.findOne(id, 'users', 'id');
+            const [user] = await CrudModelInstance.findOne(id, 'users', 'id');
             if (!user) {
                 throw createError(404, 'No user found!')
             }
@@ -64,7 +67,7 @@ module.exports = class AuthService {
             }
             return session;
         } catch (err) {
-           throw err;
+            throw err;
         }
     }
 }

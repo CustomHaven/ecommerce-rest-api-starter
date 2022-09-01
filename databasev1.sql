@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS users (
   email varchar(50) UNIQUE,      
   password text,
   is_admin boolean,
-  first_name varchar(50),
-  last_name varchar(50),
+  first_name varchar(50), -- CUSTOMER TABLE
+  last_name varchar(50), -- CUSTOMER TABLE
   google_id varchar(255),
   facebook_id varchar(255)
 );
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS store_products (
 
 CREATE TABLE IF NOT EXISTS customers (
   cid integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-  first_name varchar(50),
-  last_name varchar(50),
+  first_name varchar(50), -- USER TABLE
+  last_name varchar(50),  -- USER TABLE
   address varchar(100),
   zip_code varchar(25),
   city varchar(50),

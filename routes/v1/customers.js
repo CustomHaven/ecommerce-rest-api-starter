@@ -1,6 +1,8 @@
+// DEPRECATED ROUTES
+
 const customersRouter = require('express').Router();
-const { isAdmin } = require('../helpers/authHelper');
-const CustomerService = require('../services/CustomerService');
+const { isAdmin } = require('../../helpers/authHelper');
+const CustomerService = require('../../services/CustomerService');
 const CustomerServiceInstance = new CustomerService();
 
 

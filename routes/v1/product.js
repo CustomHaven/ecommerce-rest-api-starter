@@ -1,3 +1,5 @@
+// DEPRECATED ROUTES
+
 const productRouter = require('express').Router();
 const { isAdmin } = require('../helpers/authHelper');
 const ProductService = require('../services/ProductService');

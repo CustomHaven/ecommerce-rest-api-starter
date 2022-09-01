@@ -1,0 +1,3453 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Ecommerce RESTful API",
+    "version": "2.0.0",
+    "description": "A backend RESTful API for an Ecommerce Store",
+    "contact": {
+      "name": "Custom Haven",
+      "url": "https://github.com/CustomHaven"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://choosealicense.com/licenses/mit/"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4001/",
+      "variables": {}
+    },
+    {
+      "url": "https://rest-api-no-orm.herokuapp.com/",
+      "variables": {}
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "summary": "Login",
+      "description": "Login and get your cookie",
+      "post": {
+        "summary": "Login and get your cookie",
+        "description": "Return an authentication cookie",
+        "operationId": "login_for_cookie",
+        "requestBody": {
+          "description": "Login to your account",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"cookie\": \"connect_sid_COOKIE_STRING\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "connect_sid=abcde12345; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Login"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "summary": "Logout",
+      "description": "Logout and remove cookie",
+      "get": {
+        "summary": "Logout and remove coookie",
+        "description": "Logs out and removes the cookie",
+        "operationId": "logout_remove_cookie",
+        "responses": {
+          "205": {
+            "content": {
+              "text/plain; charset=utf-8": {
+                "examples": {
+                  "success": {
+                    "value": "Reset Content if page wont reload"
+                  }
+                }
+              }
+            },
+            "description": "Success",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "connect_sid=abcde12345; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Logout"
+        ]
+      }
+    },
+    "/v2/users": {
+      "summary": "All users",
+      "description": "All accounts",
+      "post": {
+        "summary": "Sign up",
+        "description": "Sign up a new user",
+        "operationId": "sign_up",
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"user 4\", \"first_name\": \"john\", \"last_name\": \"snow\", \"email\": \"johnsnow@example.com\", \"password\": \"johnsnow\", \"created\": \"03:03:2013 03:33\", \"modified\": \"01:05:2022 09:21\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n\"message\": \"User already exists\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Get all users",
+        "description": "Fetch all the users only an admin can do this",
+        "operationId": "get_users",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"users\": [{ \"id\": \"user 1\", \"first_name\": \"john\", \"last_name\": \"doe\", \"email\": \"john@example.com\", \"password\": \"johnpass\", \"created\": \"19:03:2021 03:18\", \"modified\": \"21:05:2022 21:40\" },{ \"id\": \"user 2\", \"first_name\": \"sam\", \"last_name\": \"jones\", \"email\": \"sam@example.com\", \"password\": \"sampass\", \"created\": \"19:04:2021 03:18\", \"modified\": \"21:04:2022 21:40\" }, { \"id\": \"user 3\", \"first_name\": \"harry\", \"last_name\": \"potter\", \"email\": \"harry@example.com\", \"password\": \"harrypass\", \"created\": \"12:04:2021 03:18\", \"modified\": \"29:04:2022 21:40\" }] }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v2/users/{id}": {
+      "summary": "Get one user",
+      "description": "Fetching one user from the database",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Get a user",
+        "description": "Getting a user based on the parameter",
+        "operationId": "get_a_users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of a user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"user 2\", \"first_name\": \"sam\",\n                    \"last_name\": \"jones\", \"email\": \"sam@example.com\",\n                    \"password\": \"sampass\", \"created\": \"19:04:2021 03:18\",\n                    \"modified\": \"21:04:2022 21:40\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n\"message\": \"Failed to fetch user\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Update a user",
+        "description": "Update a single user",
+        "operationId": "update_user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of a user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update the information of a user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"user 2\", \"first_name\": \"sam\",\n                    \"last_name\": \"jones\", \"email\": \"updatednew@example.com\",\n                    \"password\": \"sampass\", \"created\": \"19:04:2021 03:18\",\n                    \"modified\": \"22:07:2022 21:40\" }"
+                  }
+                }
+              }
+            },
+            "description": "Default error sample response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n\"message\": \"Not Found\" \n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Delete a user",
+        "description": "Removing a user based on the parameter given",
+        "operationId": "delete_user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of a user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n\"message\": \"Deleted user\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n\"message\": \"Resource could not be found, therefore operation was not carried out\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v2/users/newadmin": {
+      "summary": "Only for an admin to make another admin",
+      "description": "Only an admin can access this route and make another admin",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Sign up a new administrator",
+        "description": "Sign up a new administrator, can only be made by another administrator",
+        "operationId": "sign_up_admin",
+        "requestBody": {
+          "description": "Sign up a new administrator",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"user 4\", \"is_admin\": true, \"first_name\": \"john\", \"last_name\": \"snow\", \"email\": \"johnsnow@example.com\", \"password\": \"johnsnow\", \"created\": \"03:03:2013 03:33\", \"modified\": \"01:05:2022 09:21\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n\"message\": \"User already exists\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v2/contact-details": {
+      "summary": "User's shipping details",
+      "description": "Where a user lives so their items can be shipped to them",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "All shipping address",
+        "description": "All shipping details can only be viewed by an admin!",
+        "operationId": "fetch_all_shipping_details",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{\"id\": 1, \"user_id\": \"user 1\", \"address_line1\": \"05412 Maywood Plaza\", \"address_line2\": \"0 Talmadge Court\", \"town_city\": \"Conceição do Jacuípe\", \"zip_code\": \"44245-000\", \"country\": \"Brazil\", \"created\": \"10/11/2021\", \"modified\": \"22/07/2022\" }, { \"id\": 2, \"user_id\": \"user 2\",\"address_line1\": \"18 Gulseth Street\", \"address_line2\": \"8051 Prairie Rose Avenue\", \"town_city\": \"Furukawa\", \"zip_code\": \"963-8823\",   \"country\": \"Japan\", \"created\": \"05/10/2021\", \"modified\": \"16/03/2022\" }]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          }
+        },
+        "tags": [
+          "Contact Details"
+        ]
+      }
+    },
+    "/v2/contact-details/{user_id}": {
+      "summary": "User's shipping details",
+      "description": "Where a user lives so their items can be shipped to them",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Create shipping details",
+        "description": "Setting up the Shipping details for the specific user",
+        "operationId": "registering_shipping_details",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "The user's id from the Users table",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contact-Details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 3, \"user_id\": \"user 3\", \"address_line1\": \"44347 Nobel Place\", \"address_line2\": \"02947 Warner Hill\", \"town_city\": \"Baddomalhi\",   \"zip_code\": \"22501\", \"country\": \"Pakistan\",\"created\": \"14/10/2021\", \"modified\": \"21/02/2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          }
+        },
+        "tags": [
+          "Contact Details"
+        ]
+      }
+    },
+    "/v2/contact-details/{id}": {
+      "summary": "Specific user's details",
+      "description": "Fetch and do something with a user's contact details based on the given parameter",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Display shipping details",
+        "description": "Display a user's shipping details to them",
+        "operationId": "display_shipping_details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the contact detail",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"id\": 1, \"user_id\": \"user 1\", \"address_line1\": \"05412 Maywood Plaza\", \"address_line2\": \"0 Talmadge Court\", \"town_city\": \"Conceição do Jacuípe\", \"zip_code\": \"44245-000\", \"country\": \"Brazil\", \"created\": \"10/11/2021\", \"modified\": \"22/07/2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{ \"message\": \"Failed to fetch details\" }"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Contact Details"
+        ]
+      },
+      "put": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Update a user's contact details",
+        "description": "Display a user's contact details to them",
+        "operationId": "update_contact_details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the contact detail",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contact-Details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"id\": 1, \"user_id\": \"user 1\", \"address_line1\": \"10 Downing Street\", \"address_line2\": \"Westminister\", \"town_city\": \"London\", \"zip_code\": \"SW1A 2AA\", \"country\": \"United Kingdom\", \"created\": \"10/11/2021\", \"modified\": \"22/07/2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{ \"message\": \"Failed to fetch details\" }"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Contact Details"
+        ]
+      },
+      "delete": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Delete shipping detail",
+        "description": "Delete a user's shipping details",
+        "operationId": "delete_shipping_details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the contact detail",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"message\": \"Successfully deleted\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{ \"message\": \"Failed to fetch details\" }"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Contact Details"
+        ]
+      }
+    },
+    "/v2/products": {
+      "summary": "Route to products",
+      "description": "All routes to all the products in store",
+      "get": {
+        "summary": "Fetch all products",
+        "description": "Display all the products in the store",
+        "operationId": "all_products",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{\n  \"id\": \"prod 1\", \"source\": \"http://reference.com/sodales/scelerisque/mauris/sit/amet.html\", \"product_name\": \"Cake - Cheese Cake 9 Inch\", \"type\": \"Lettuce - Lambs Mash\", \"description\": \"Suspendisse potenti.\", \"price\": \"$7.68\", \"quantity\": 30, \"created\": \"11/09/2021\", \"modified\": \"21/03/2022\" }, { \"id\": \"prod 2\", \"source\": \"http://jigsy.com/ante/vel/ipsum/praesent.jsp\", \"product_name\": \"Oranges - Navel, 72\", \"type\": \"Mustard - Seed\", \"description\": \"Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\", \"price\": \"$9.06\", \"quantity\": 1, \"created\": \"08/11/2021\", \"modified\": \"03/04/2022\" }, { \"id\": \"prod 3\", \"source\": \"https://wikia.com/velit/nec/nisi.xml\", \"product_name\": \"Wine - Masi Valpolocell\", \"type\": \"Beans - Yellow\", \"description\": \"Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst.\", \"price\": \"$8.33\", \"quantity\": 43, \"created\": \"10/11/2021\", \"modified\": \"09/12/2021\" }, { \"id\": \"prod 4\", \"source\": \"http://blogger.com/arcu/adipiscing/molestie/hendrerit/at/vulputate/vitae.jsp?orci=sollicitudin\", \"product_name\": \"Mushroom - Shitake, Dry\", \"type\": \"Calypso - Black Cherry Lemonade\", \"description\": \"Praesent lectus. Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.\", \"price\": \"$2.14\", \"quantity\": 31, \"created\": \"25/08/2021\", \"modified\": \"17/05/2022\" }, { \"id\": \"prod 5\", \"source\": \"http://hostgator.com/convallis/duis/consequat.json\", \"product_name\": \"Pomello\", \"type\": \"Truffle Paste\", \"description\": \"Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.\", \"price\": \"$2.67\", \"quantity\": 100, \"created\": \"21/10/2021\", \"modified\": \"18/11/2021\" }, { \"id\": \"prod 6\", \"source\": \"http://about.me/aliquam/lacus/morbi/quis/tortor/id.xml?vestibulum=sapien\", \"product_name\": \"Ice Cream - Chocolate\", \"type\": \"Capon - Breast, Double, Wing On\", \"description\": \"Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante.\", \"price\": \"$0.72\", \"quantity\": 90, \"created\": \"04/10/2021\", \"modified\": \"18/01/2022\" }, { \"id\": \"prod 7\", \"source\": \"http://tamu.edu/nullam/orci/pede/venenatis/non.jpg?ante=vel&vestibulum=nisl\", \"product_name\": \"Salmon - Atlantic, Skin On\", \"type\": \"Broom And Broom Rack White\", \"description\": \"Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt.\", \"price\": \"$8.14\", \"quantity\": 65, \"created\": \"14/10/2021\", \"modified\": \"20/07/2022\" }, { \"id\": \"prod 8\", \"source\": \"https://netvibes.com/in/congue/etiam/justo.xml?donec=porta&pharetra=volutpat\", \"product_name\": \"Bread - Roll, Calabrese\", \"type\": \"Chicken - Tenderloin\", \"description\": \"In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit.\", \"price\": \"$4.27\", \"quantity\": 15, \"created\": \"22/08/2021\", \"modified\": \"31/01/2022\" }, { \"id\": \"prod 9\", \"source\": \"https://europa.eu/quis.js?sit=ac\", \"product_name\": \"Muffin Hinge 117n\", \"type\": \"Apron\", \"description\": \"Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\", \"price\": \"$5.87\", \"quantity\": 23, \"created\": \"25/09/2021\", \"modified\": \"24/01/2022\" }, { \"id\": \"prod 10\", \"source\": \"http://scientificamerican.com/integer/ac/neque/duis.json?mauris=morbi\", \"product_name\": \"Bread - Pita, Mini\", \"type\": \"Dooleys Toffee\", \"description\": \"In eleifend quam a odio. In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum.\", \"price\": \"$2.01\", \"quantity\": 52, \"created\": \"22/08/2021\", \"modified\": \"07/12/2021\" }]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No products\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "New product",
+        "description": "Save a new product to the store",
+        "operationId": "new_product",
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Products"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"id\":\"prod 11\",\"source\":\"https://about.me/volutpat/quam.aspx?hac=ultrices&habitasse=phasellus&platea=id&dictumst=sapien\",\"product_name\":\"PassionFruit\",\"type\":\"Snapple Lemon Tea\",\"description\":\"Etiampretium iaculis justo. In hac habitasse platea dictumst.Etiam faucibus cursus urna. Uttellus.\",\"price\":\"$8.31\",\"quantity\":51,\"created\":\"11/09/2021\",\"modified\":\"25/02/2022\"}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/v2/products/{id}": {
+      "summary": "Fetching a product",
+      "description": "Id of a single product",
+      "get": {
+        "summary": "Fetch a product",
+        "description": "Fetch a product based on it's ID",
+        "operationId": "fetch_single_product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"prod 4\", \"source\": \"http://blogger.com/arcu/adipiscing/molestie/hendrerit/at/vulputate/vitae.jsp?orci=sollicitudin\", \"product_name\": \"Mushroom - Shitake, Dry\", \"type\": \"Calypso - Black Cherry Lemonade\", \"description\": \"Praesent lectus. Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.\", \"price\": \"$2.14\", \"quantity\": 31, \"created\": \"25/08/2021\", \"modified\": \"17/05/2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Failed to fetch the product\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "put": {
+        "summary": "Update a product",
+        "description": "Update a fetched product",
+        "operationId": "update_single_product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update the product",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Products"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"prod 3\", \"source\": \"http://google.com/updated/the/url/of/this/product/vitae.jsp?orci=sollicitudin\", \"product_name\": \"Rice and Chicken\", \"type\": \"Exotic Food\", \"description\": \"Praesent lectus. Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.\", \"price\": \"$2.14\", \"quantity\": 33, \"created\": \"25/08/2021\", \"modified\": \"28/07/2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "delete": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Delete a product",
+        "description": "Delete a product at hand",
+        "operationId": "delete_single_product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"message\": \"Successfully deleted\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/v2/product-images/{product_id}": {
+      "summary": "A product's all images",
+      "description": "List all Images that belong to a particular product",
+      "get": {
+        "summary": "A product's all images",
+        "description": "All images belonging to a particular product",
+        "operationId": "product_all_images",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The product's id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"product\": { \"id\": \"prod 3\", \"source\": \"https://wikia.com/velit/nec/nisi.xml\", \"product_name\": \"Wine - Masi Valpolocell\", \"type\": \"Beans - Yellow\", \"description\": \"Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst.\", \"price\": \"$8.33\", \"quantity\": 43, \"created\": \"10/11/2021\", \"modified\": \"09/12/2021\" },\"product_images\": [{ \"id\":3,\"product_id\": \"prod 3\", \"image_name\": \"Other SideofBollywood, The\",\"image_data\":\"http://dummyimage.com/151x100.png/5fa2dd/ffffff\",\"created\":\"25/08/2021\", \"modified\": \"30/08/2021\"},{\"id\":11,\"product_id\":\"prod 3\",\"image_name\":\"Hardcover\",\"image_data\":\"http://dummyimage.com/122x100.png/ff4444/ffffff\",\"created\":\"14/10/2021\",\"modified\":\"29/10/2021\"},{\"id\":12,\"product_id\":\"prod 3\",\"image_name\":\"Rendezvous\",\"image_data\":\"http://dummyimage.com/197x100.png/5fa2dd/ffffff\",\"created\":\"21/10/2021\",\"modified\":\"19/09/2021\"},{\"id\":13,\"product_id\":\"prod 3\",\"image_name\":\"King ofCalifornia\",\"image_data\":\"http://dummyimage.com/187x100.png/5fa2dd/ffffff\",\"created\":\"29/08/2021\",\"modified\":\"27/09/2021\"}]}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No images\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      },
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Save a new image",
+        "description": "Save a new image to the store",
+        "operationId": "new_image_save",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The product's id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product-Image"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\":14, \"product_id\": \"prod 5\", \"image_name\": \"BarbarianQueen\", \"image_data\":\"http://dummyimage.com/119x100.png/cc0000/ffffff\",\"created\": \"11/11/2021\", \"modified\": \"12/09/2021\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      }
+    },
+    "/v2/product-images": {
+      "summary": "Images for the products",
+      "description": "Where all the images are stored",
+      "get": {
+        "summary": "All images",
+        "description": "All images for all products in no particular order",
+        "operationId": "all_images",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{  \"id\": 1, \"product_id\": \"prod 1\", \"image_name\": \"NastyOldPeople\",\"image_data\":\"http://dummyimage.com/165x100.png/5fa2dd/ffffff\",\"created\":\"04/09/2021\", \"modified\": \"10/11/2021\"}, { \"id\":2,\"product_id\": \"prod 2\", \"image_name\": \"Inheritance,The(Karami-ai)\",\"image_data\":\"http://dummyimage.com/143x100.png/cc0000/ffffff\",\"created\":\"06/11/2021\", \"modified\": \"29/10/2021\"}, { \"id\":3,\"product_id\": \"prod 3\", \"image_name\": \"Other SideofBollywood, The\",\"image_data\":\"http://dummyimage.com/151x100.png/5fa2dd/ffffff\",\"created\":\"25/08/2021\", \"modified\": \"30/08/2021\"}, { \"id\":4,\"product_id\": \"prod 4\", \"image_name\": \"WutheringHeights\",\"image_data\":\"http://dummyimage.com/107x100.png/dddddd/000000\",\"created\":\"20/09/2021\", \"modified\": \"23/09/2021\"}, { \"id\":5,\"product_id\": \"prod 5\", \"image_name\": \"I Still Know WhatYouDid Last Summer\",\"image_data\":\"http://dummyimage.com/216x100.png/cc0000/ffffff\",\"created\":\"06/11/2021\", \"modified\": \"29/08/2021\"}, { \"id\":6,\"product_id\": \"prod 6\", \"image_name\":\"Daylight\",\"image_data\":\"http://dummyimage.com/218x100.png/5fa2dd/ffffff\",\"created\":\"30/10/2021\", \"modified\": \"24/08/2021\"}, { \"id\":7,\"product_id\": \"prod 7\", \"image_name\": \"Deep BlueSea\",\"image_data\":\"http://dummyimage.com/162x100.png/dddddd/000000\",\"created\":\"22/08/2021\", \"modified\": \"08/11/2021\"}, { \"id\":8,\"product_id\": \"prod 8\", \"image_name\": \"Coup de grâce(DerFangschuß)\",\"image_data\":\"http://dummyimage.com/132x100.png/dddddd/000000\",\"created\":\"09/10/2021\", \"modified\": \"17/09/2021\"}, { \"id\":9,\"product_id\": \"prod 9\", \"image_name\": \"Going to KansasCity\",\"image_data\":\"http://dummyimage.com/180x100.png/5fa2dd/ffffff\",\"created\":\"12/11/2021\", \"modified\": \"06/10/2021\"}, { \"id\":10,\"product_id\": \"prod 10\", \"image_name\": \"BarbarianQueen\",\"image_data\":\"http://dummyimage.com/119x100.png/cc0000/ffffff\",\"created\":\"11/11/2021\", \"modified\":\"12/09/2021\"},{\"id\":11,\"product_id\":\"prod 3\",\"image_name\":\"Hardcover\",\"image_data\":\"http://dummyimage.com/122x100.png/ff4444/ffffff\",\"created\":\"14/10/2021\",\"modified\":\"29/10/2021\"},{\"id\":12,\"product_id\":\"prod 3\",\"image_name\":\"Rendezvous\",\"image_data\":\"http://dummyimage.com/197x100.png/5fa2dd/ffffff\",\"created\":\"21/10/2021\",\"modified\":\"19/09/2021\"},{\"id\":13,\"product_id\":\"prod 3\",\"image_name\":\"King ofCalifornia\",\"image_data\":\"http://dummyimage.com/187x100.png/5fa2dd/ffffff\",\"created\":\"29/08/2021\",\"modified\":\"27/09/2021\"}]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No images\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      }
+    },
+    "/v2/product-images/single/{id}": {
+      "summary": "A particular Image",
+      "description": "Single out an image",
+      "get": {
+        "summary": "Fetch an image",
+        "description": "An image that belongs to a product based on the product id",
+        "operationId": "fetch_single_image_product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the image",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\":10, \"product_id\": \"prod 10\", \"image_name\": \"BarbarianQueen\", \"image_data\":\"http://dummyimage.com/119x100.png/cc0000/ffffff\",\"created\": \"11/11/2021\", \"modified\": \"12/09/2021\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Failed to fetch the image\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      },
+      "put": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Update an image",
+        "description": "Update an image that belongs to a product based on the product id",
+        "operationId": "update_single_image_product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the image",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product-Image"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\":10, \"product_id\": \"prod 10\", \"image_name\": \"updated_to_a_new_product_name\", \"image_data\":\"http://dummyimage.com/119x100.png/cc0000/ffffff\",\"created\": \"11/11/2021\", \"modified\": \"23/06/2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      },
+      "delete": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Delete an image",
+        "description": "Delete an image that belongs to a product based on the product id",
+        "operationId": "delete_single_image_product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the image",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"message\": \"Successfully deleted\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      }
+    },
+    "/v2/carts": {
+      "summary": "Cart Opened",
+      "description": "This is the main cart which is linked to all items inside cart-list",
+      "get": {
+        "summary": "Show all the carts",
+        "description": "All the carts only an admin can view this",
+        "operationId": "show_cart",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{ \"id\": 1, \"user_id\": \"user 1\", \"abandonded\": false, \"created\": \"01-01-2022\", \"modified\": \"04-03-2022\" }, { \"id\": 2, \"user_id\": \"user 2\", \"abandonded\": true, \"created\": \"29-08-2021\", \"modified\": \"11-05-2022\" }, { \"id\": 3, \"user_id\": \"user 3\", \"abandonded\": false, \"created\": \"04-11-2021\", \"modified\": \"12-03-2022\" }, { \"id\": 4, \"user_id\": \"user 2\", \"abandonded\": false, \"created\": \"06-11-2021\", \"modified\": \"28-03-2022\" }, { \"id\": 5, \"user_id\": \"user 3\", \"abandonded\": true, \"created\": \"22-11-2021\", \"modified\": \"28-03-2022\" }]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No orders\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/v2/carts/cart/user_id": {
+      "summary": "Open a new cart",
+      "description": "This route makes a new cart",
+      "post": {
+        "summary": "Create a cart",
+        "description": "A cart is created once a customers adds an item to their cart",
+        "operationId": "new_cart",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "The user's id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create a cart",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 6, \"user_id\": \"user 4\", \"abandonded\": false, \"created\": \"20-12-2021\", \"modified\": \"12-03-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/v2/carts/{id}": {
+      "summary": "Get a cart",
+      "description": "Shows the cart to the customer",
+      "get": {
+        "summary": "Display a cart",
+        "description": "Shows the customer their cart",
+        "operationId": "display_cart",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the cart",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"user 3\", \"user_id\": 3, \"abandonded\": false, \"created\": \"04-11-2021\",\n\"modified\": \"12-03-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Resources not found\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart"
+        ]
+      },
+      "put": {
+        "summary": "Update a cart",
+        "description": "Update the customer's cart",
+        "operationId": "update_cart",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the cart",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"user 3\", \"user_id\": 3, \"abandonded\": true, \"created\": \"04-11-2021\",\n\"modified\": \"21-08-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Could not update\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a cart",
+        "description": "Deletes a cart when it is empty",
+        "operationId": "delete_cart",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the cart",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"message\": \"Cart deleted\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Could not delete the cart\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/v2/cart-list": {
+      "summary": "The list of items in a cart",
+      "description": "These paths is all about counting the individual items in the cart their quantity and total prices",
+      "get": {
+        "summary": "Every item in every cart",
+        "description": "This is all search route only for admins showing every item that has been placed in every cart",
+        "operationId": "every_cart_item_in_every_cart",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{ \"id\": 1, \"product_id\": 1, \"cart_id\": 1, \"quantity\": 6, \"created\": \"26-08-2021\", \"modified\": \"02-04-2022\" }, { \"id\": 2, \"product_id\": 2, \"cart_id\": 1, \"quantity\": 6, \"created\": \"08-09-2021\", \"modified\": \"30-05-2022\" }, { \"id\": 3, \"product_id\": 3, \"cart_id\": 1, \"quantity\": 6, \"created\": \"30-10-2021\", \"modified\": \"03-06-2022\" }, { \"id\": 4, \"product_id\": 4, \"cart_id\": 3, \"quantity\": 4, \"created\": \"12-09-2021\", \"modified\": \"18-04-2022\" }, { \"id\": 5, \"product_id\": 5, \"cart_id\": 3, \"quantity\": 6, \"created\": \"12-11-2021\", \"modified\": \"20-03-2022\" }, { \"id\": 6, \"product_id\": 6, \"cart_id\": 3, \"quantity\": 3, \"created\": \"01-09-2021\", \"modified\": \"28-02-2022\" }, { \"id\": 7, \"product_id\": 7, \"cart_id\": 4, \"quantity\": 4, \"created\": \"31-12-2021\", \"modified\": \"15-05-2022\" }, { \"id\": 8, \"product_id\": 8, \"cart_id\": 4, \"quantity\": 3, \"created\": \"17-12-2021\", \"modified\": \"12-03-2022\" }, { \"id\": 9, \"product_id\": 9, \"cart_id\": 4, \"quantity\": 5, \"created\": \"28-12-2021\", \"modified\": \"09-03-2022\" }, { \"id\": 10, \"product_id\": 10, \"cart_id\": 4, \"quantity\": 1, \"created\": \"09-01-2022\", \"modified\": \"09-03-2022\" }]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No items at all\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart List"
+        ]
+      }
+    },
+    "/v2/cart-list/cart/{cart_id}": {
+      "summary": "The cart with all it's items",
+      "description": "Current cart will display all the items that is being added to it",
+      "get": {
+        "summary": "Cart showing all its items",
+        "description": "Route showing all the items that were added to cart",
+        "operationId": "cart_with_all_its_items",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "The id of the cart",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"cart\":{ \"id\": 4, \"user_id\": \"user 2\",\n\"abandonded\": false, \"created\": \"06-11-2021\", \"modified\":\n\"28-03-2022\" }, \"cart_list\":[{ \"id\": 7,\n\"product_id\": 7, \"cart_id\": 4, \"quantity\": 4, \"created\":\n\"31-12-2021\", \"modified\": \"15-05-2022\" }, { \"id\": 8,\n\"product_id\": 8, \"cart_id\": 4, \"quantity\": 3, \"created\":\n\"17-12-2021\", \"modified\": \"12-03-2022\" }, { \"id\": 9,\n\"product_id\": 9, \"cart_id\": 4, \"quantity\": 5, \"created\":\n\"28-12-2021\", \"modified\": \"09-03-2022\" }, { \"id\": 10,\n\"product_id\": 10, \"cart_id\": 4, \"quantity\": 1, \"created\":\n\"09-01-2022\", \"modified\": \"09-03-2022\" }\n]}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No items in cart\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart List"
+        ]
+      },
+      "post": {
+        "summary": "Add item to cart",
+        "description": "Add an item to cart based on the cart id",
+        "operationId": "add_item_to_cart",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "The id of the cart",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart-List"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 11, \"product_id\": 3, \"cart_id\": 4, \"quantity\": 3, \"created\": \"04-02-2022\", \"modified\": \"07-04-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart List"
+        ]
+      }
+    },
+    "/v2/cart-list/{id}": {
+      "summary": "Route for the specific item in cart",
+      "description": "Modify the specific item that is inside cart",
+      "get": {
+        "summary": "Get an item in the cart",
+        "description": "Get a specific item in the cart",
+        "operationId": "get_a_cart_item",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the cart item",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 10, \"product_id\": 10, \"cart_id\": 4, \"quantity\": 3, \"created\": \"09-01-2022\", \"modified\": \"09-03-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart List"
+        ]
+      },
+      "put": {
+        "summary": "Update an item in the cart",
+        "description": "Update a specific item in the cart",
+        "operationId": "update_cart_item",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the cart item",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart-List"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 10, \"product_id\": 10, \"cart_id\": 4, \"quantity\": 3, \"created\": \"09-01-2022\", \"modified\": \"09-03-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart List"
+        ]
+      },
+      "delete": {
+        "summary": "Remove an item from cart",
+        "description": "Deletes the item from the cart once quantity reaches 0 done in the frontend",
+        "operationId": "delete_cart_item",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the cart item",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"message\": \"Cart item deleted\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Could not delete the item from the cart\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Cart List"
+        ]
+      }
+    },
+    "/v2/orders": {
+      "summary": "Completed successful orders",
+      "description": "All routes to completed orders",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "All orders made",
+        "description": "All orders that were made for the Ecommerce online store",
+        "operationId": "all_orders",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{\"id\": \"order 1\", \"user_id\": \"user 2\", \"cart_id\": 1, \"status_shipping\": \"success\", \"final_price\": 150.42, \"total_items\": 18, \"tracking_id\": \"some good RM id\", \"created\": \"07-09-2021\", \"modified\": \"15-03-2022\"}, {\"id\": \"order 2\", \"user_id\": \"user 3\", \"cart_id\": 3, \"status_shipping\": \"success\", \"final_price\": 26.74, \"total_items\": 13, \"tracking_id\": \"some good RM id\", \"created\": \"08-09-2021\", \"modified\": \"15-01-2022\"}, {\"id\": \"order 3\", \"user_id\": \"user 3\", \"cart_id\": 4, \"status_shipping\": \"pending\", \"final_price\": 76.73, \"total_items\": 12, \"tracking_id\": \"not available\", \"created\": \"08-08-2022\", \"modified\": \"08-08-2022\"}]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      },
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Make a new order",
+        "description": "When a customer successfully makes a purchase we save their purchase to a unique table",
+        "operationId": "complete_order",
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n  \"id\": \"order 4\",\n  \"user_id\": \"user 1\",\n  \"cart_id\": 6,\n  \"status_shipping\": \"pending\",\n  \"final_price\": 21.62,\n  \"total_items\": 4,\n  \"tracking_id\": \"not available\",\n  \"created\": \"20-08-2022\",\n  \"modified\": \"20-08-2022\",\n  \"order_list\": [\n    {\n      \"id\": 11,\n      \"product_id\": \"prod 5\",\n      \"order_id\": \"order 4\",\n      \"quantity\": 2,\n      \"price\": 5.34,\n      \"created\": \"20-08-2022\",\n      \"modified\": \"20-08-2022\"\n    },\n    {\n      \"id\": 12,\n      \"product_id\": \"prod 7\",\n      \"order_id\": \"order 4\",\n      \"quantity\": 2,\n      \"price\": 16.28,\n      \"created\": \"20-08-2022\",\n      \"modified\": \"20-08-2022\"\n    }\n  ]\n}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/v2/orders/{user_id}/{cart_id}": {
+      "summary": "Completed successful orders",
+      "description": "All routes to completed orders",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Elite route makes a new order and also fills in all order lists",
+        "description": "When a customer successfully makes a purchase we save their purchase to a unique table",
+        "operationId": "complete_order_does_order_list_as_well",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "The id of the user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "The id of the cart",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n  \"id\": \"order 4\",\n  \"user_id\": \"user 1\",\n  \"cart_id\": 6,\n  \"status_shipping\": \"pending\",\n  \"final_price\": 21.62,\n  \"total_items\": 4,\n  \"tracking_id\": \"not available\",\n  \"created\": \"20-08-2022\",\n  \"modified\": \"20-08-2022\",\n  \"order_list\": [\n    {\n      \"id\": 11,\n      \"product_id\": \"prod 5\",\n      \"order_id\": \"order 4\",\n      \"quantity\": 2,\n      \"price\": 5.34,\n      \"created\": \"20-08-2022\",\n      \"modified\": \"20-08-2022\"\n    },\n    {\n      \"id\": 12,\n      \"product_id\": \"prod 7\",\n      \"order_id\": \"order 4\",\n      \"quantity\": 2,\n      \"price\": 16.28,\n      \"created\": \"20-08-2022\",\n      \"modified\": \"20-08-2022\"\n    }\n  ]\n}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/v2/orders/{id}": {
+      "summary": "Completed successful orders",
+      "description": "All routes to completed orders",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Get an order along with all order items",
+        "description": "This route gets and shows an order along with all order items",
+        "operationId": "order_with_all_order_items",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"order\":{ \"id\": \"order 3\", \"user_id\": \"user 2\", \"cart_id\": 4,\n\"status_shipping\": \"pending\", \"final_price\": 76.73, \"total_items\": 12, \"tracking_id\": \"not available\", \"created\": \"08-08-2022\", \"modified\":\n\"08-08-2022\" }, \"order_list\":[{ \"id\": 7,\n\"product_id\": \"prod 7\", \"order_id\": \"order 3\", \"quantity\": 4, \"price\": 32.56, \"created\":\n\"08-08-2022\", \"modified\": \"08-08-2022\" }, { \"id\": 8,\n\"product_id\": \"prod 8\", \"order_id\": \"order 3\", \"quantity\": 3, \"price\": 12.81, \"created\":\n\"08-08-2022\", \"modified\": \"08-08-2022\" }, { \"id\": 9,\n\"product_id\": \"prod 9\", \"order_id\": \"order 3\", \"quantity\": 5, \"price\": 29.35, \"created\":\n\"08-08-2022\", \"modified\": \"08-08-2022\" }, { \"id\": 10,\n\"product_id\": \"prod 10\", \"order_id\": \"order 3\", \"quantity\": 1, \"price\": 2.01, \"created\":\n\"08-08-2022\", \"modified\": \"08-08-2022\" }\n]}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No items in the order\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      },
+      "put": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Update an order",
+        "description": "Update the tracking and shipping information",
+        "operationId": "update_an_orders_shipping_tracking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update the order",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": \"order 3\", \"user_id\": \"user 2\", \"cart_id\": 4,\n\"status_shipping\": \"pending\", \"final_price\": 76.73, \"total_items\": 12, \"tracking_id\": \"not available\", \"created\": \"08-08-2022\", \"modified\":\n\"08-08-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Forbidden\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/v2/order-list/order/{order_id}": {
+      "summary": "The order with all it's items",
+      "description": "Current order will display along with all the items that it contains",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Add item to cart",
+        "description": "Add an item to cart based on the cart id",
+        "operationId": "add_item_to_the_order",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "The id of the order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order-List"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 11, \"product_id\": \"prod 3\", \"order_id\": \"order 3\", \"quantity\": 3, \"price\": \"24.99\", \"created\": \"04-02-2022\", \"modified\": \"07-04-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Conflict\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Order List"
+        ]
+      }
+    },
+    "/v2/order-list": {
+      "summary": "The list of items in a completed order",
+      "description": "These paths is all about connecting each items to their particular order",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Every item in the order",
+        "description": "This is all search route only for admins showing every item in each and every order",
+        "operationId": "every_item_in_every_order",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{ \"id\": 1, \"product_id\": \"prod 1\", \"order_id\": \"order 1\", \"quantity\": 6, \"price\": 46.08, \"created\": \"26-08-2021\", \"modified\": \"02-04-2022\" }, { \"id\": 2, \"product_id\": \"prod 2\", \"order_id\": \"order 1\", \"quantity\": 6, \"price\": 54.36, \"created\": \"08-09-2021\", \"modified\": \"30-05-2022\" }, { \"id\": 3, \"product_id\": \"prod 3\", \"order_id\": \"order 1\", \"quantity\": 6, \"price\": 49.98, \"created\": \"30-10-2021\", \"modified\": \"03-06-2022\" }, { \"id\": 4, \"product_id\": \"prod 4\", \"order_id\": \"order 2\", \"quantity\": 4, \"price\": 8.56, \"created\": \"12-09-2021\", \"modified\": \"18-04-2022\" }, { \"id\": 5, \"product_id\": \"prod 5\", \"order_id\": \"order 2\", \"quantity\": 6, \"price\": 16.02, \"created\": \"12-11-2021\", \"modified\": \"20-03-2022\" }, { \"id\": 6, \"product_id\": \"prod 6\", \"order_id\": \"order 2\", \"quantity\": 3, \"price\": 2.16, \"created\": \"01-09-2021\", \"modified\": \"28-02-2022\" }, { \"id\": 7, \"product_id\": \"prod 7\", \"order_id\": \"order 3\", \"quantity\": 4, \"price\": 32.56, \"created\": \"08-08-2022\", \"modified\": \"08-08-2022\" }, { \"id\": 8, \"product_id\": \"prod 8\", \"order_id\": \"order 3\", \"quantity\": 3, \"price\": 12.81, \"created\": \"08-08-2022\", \"modified\": \"08-08-2022\" }, { \"id\": 9, \"product_id\": \"prod 9\", \"order_id\": \"order 3\", \"quantity\": 5, \"price\": 29.35, \"created\": \"08-08-2022\", \"modified\": \"08-08-2022\" }, { \"id\": 10, \"product_id\": \"prod 10\", \"order_id\": \"order 3\", \"quantity\": 1, \"price\": 2.01, \"created\": \"08-08-2022\", \"modified\": \"08-08-2022\" }]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No ordered items\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Order List"
+        ]
+      }
+    },
+    "/v2/order-list/{id}": {
+      "summary": "Route for the specific item in the order",
+      "description": "Modify the specific item that is inside cart",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Get an item in from the order",
+        "description": "Retrieve a specific item from the order",
+        "operationId": "get_order_item",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the order item",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{ \"id\": 10, \"product_id\": \"prod 10\", \"order_id\": \"order 3\", \"quantity\": 3, \"price\": \"6.03\", \"created\": \"09-01-2022\", \"modified\": \"09-03-2022\" }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Order item not found\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Order List"
+        ]
+      }
+    },
+    "/v2/payment-details": {
+      "summary": "Routes dealing with payment details",
+      "description": "These are all fake examples of fake credit cards",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "All payment only for admin",
+        "description": "Only for administrator all payment details",
+        "operationId": "get_all_payments",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{\n  \"id\": 1,\n  \"user_id\": \"user 1\",\n  \"name_on_card\": \"Glen Rey\",\n  \"card_type\": \"mastercard\",\n  \"card_number\": \"5436178723473028\",\n  \"expiry_date\": \"2023-02\",\n  \"cvv\": 761,\n  \"created\": \"07-09-2021\",\n  \"modified\": \"07-09-2021\"\n}, {\n  \"id\": 2,\n  \"user_id\": \"user 2\",\n  \"name_on_card\": \"Nettie Burel\",\n  \"card_type\": \"jcb\",\n  \"card_number\": \"3562467450368308\",\n  \"expiry_date\": \"2024-04\",\n  \"cvv\": 653,\n  \"created\": \"08-09-2021\",\n  \"modified\": \"08-09-2021\"\n}, {\n  \"id\": 3,\n  \"user_id\": \"user 3\",\n  \"name_on_card\": \"Shayla Mustarde\",\n  \"card_type\": \"bankcard\",\n  \"card_number\": \"5602221090906614\",\n  \"expiry_date\": \"2023-02\",\n  \"cvv\": 591,\n  \"created\": \"08-08-2022\",\n  \"modified\": \"08-08-2022\"\n}]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Forbidden\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      }
+    },
+    "/v2/payment-details/publish-key": {
+      "summary": "The API publish key for client use",
+      "description": "API publish key route for the client to use",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "The Stripe Publish Key",
+        "description": "The API publish key for client use",
+        "operationId": "stripe_publish_key",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n  \"publishKey\": \"pk_test_RANDOM_STRING\"\n }"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Forbidden\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      }
+    },
+    "/v2/payment-details/create-payment-intent": {
+      "summary": "The Paying using safe stripe option",
+      "description": "This route is paying through stripe",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Frontend client pays through stripe interface",
+        "description": "Client pays through Stripe using the publish key",
+        "operationId": "payment_through_stripe_using_publish_key",
+        "requestBody": {
+          "description": "Pay using stripe publish key",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment-Intent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "payment_intent_id": "pi_A_STRING_CONFIRMING_PAYMENT"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "402": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": {
+                      "message": "Payment declined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": {
+                      "message": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      }
+    },
+    "/v2/payment-details/{user_id}": {
+      "summary": "The route to make a payment",
+      "description": "This route is to make a payment",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Make a payment",
+        "description": "A customer makes a payment through this route",
+        "operationId": "make_a_payment",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "The id of the user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment-Detail"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"id\":4,\"user_id\":\"user 4\", \"name_on_card\":\"Kev Perkins\", \"card_type\":\"maestro\", \"card_number\":\"6759286189048599428\",\"expiry_date\":\"2024-10\", \"cvv\":346,\"created\":\"15-08-2022\",\"modified\":\"15-08-2022\"}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Invalid information\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      }
+    },
+    "/v2/payment-details/{id}": {
+      "summary": "Routes for specific payment detail",
+      "description": "These routes can only be accessed by a customer and they will only see their own payment details, if they want to manipulate it or not.",
+      "get": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Show customer their payment details",
+        "description": "Show only the customer their own payment detail",
+        "operationId": "show_customer_their_payment_detail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the payment detail",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n  \"id\": 2,\n  \"user_id\": \"user 2\",\n  \"name_on_card\": \"Nettie Burel\",\n  \"card_type\": \"jcb\",\n  \"card_number\": \"3562467450368308\",\n  \"expiry_date\": \"2024-04\",\n  \"cvv\": 653,\n  \"created\": \"08-09-2021\",\n  \"modified\": \"08-09-2021\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Forbidden\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      },
+      "put": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Enable customer to update their payment details",
+        "description": "Enable the logged in customer to update their own payment detail",
+        "operationId": "update_customer_payment_detail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the payment detail",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update customer's payment details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment-Detail"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n  \"id\": 2,\n  \"user_id\": \"user 2\",\n  \"name_on_card\": \"Nettie Burel\",\n  \"card_type\": \"jcb\",\n  \"card_number\": \"3554468495886296\",\n  \"expiry_date\": \"2027-08\",\n  \"cvv\": 206,\n  \"created\": \"08-09-2021\",\n  \"modified\": \"24-08-2022\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Forbidden\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      },
+      "delete": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Delete customer's payment details",
+        "description": "A customer can delete their own payment details",
+        "operationId": "delete_customer_payment_detail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the payment detail",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\n  \"message\": \"Successfully deleted\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Forbidden\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Payment Details"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Users"
+        }
+      },
+      "Contact-Details": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "address_line1": {
+            "type": "string"
+          },
+          "address_line2": {
+            "type": "string"
+          },
+          "town_city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Contact-Details"
+        }
+      },
+      "Products": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Products"
+        }
+      },
+      "Product-Image": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "image_name": {
+            "type": "string"
+          },
+          "image_data": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Product-Images"
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "abandonded": {
+            "type": "boolean"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Cart"
+        }
+      },
+      "Cart-List": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "cart_id": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Cart-List"
+        }
+      },
+      "Order-List": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Order-List"
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "cart_id": {
+            "type": "number"
+          },
+          "shipping_status": {
+            "type": "string"
+          },
+          "final_price": {
+            "type": "number"
+          },
+          "total_items": {
+            "type": "number"
+          },
+          "tracking_id": {
+            "type": "number"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Order"
+        }
+      },
+      "Complete-Order": {
+        "type": "object",
+        "properties": {
+          "Order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "Order_list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Order-List"
+            }
+          }
+        },
+        "xml": {
+          "name": "Complete-Order"
+        }
+      },
+      "Payment-Detail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name_on_card": {
+            "type": "string"
+          },
+          "card_type": {
+            "type": "string"
+          },
+          "card_number": {
+            "type": "number"
+          },
+          "expiry_date": {
+            "type": "string"
+          },
+          "cvv": {
+            "type": "number"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Payment-Detail"
+        }
+      },
+      "Payment-Intent": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Payment-Intent"
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect_sid"
+      }
+    }
+  }
+}

@@ -1,3 +1,5 @@
+// DEPRECATED ROUTES
+
 // const authRouter = require('./auth');
 // const cartRouter = require('./cart');
 const dealersRouter = require('./dealer');
@@ -16,5 +18,5 @@ module.exports = (app, passport) => {
     productRouter(app);
     ordersRouter(app);
     orderListRouter(app);
-    authRouter(app, passport);
+    // authRouter(app, passport);
 }

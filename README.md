@@ -1,4 +1,4 @@
-# codecademy-ecommerce-rest-api
+# codecademy-ecommerce-rest-api Version 2
 Node/Express REST API to provide typical functionality found in an ecommerce website.  Users can create accounts, view products, add products to a cart, and place/view orders.
 
 ## Running the app
@@ -8,7 +8,7 @@ This project requires a [PostgreSQL](https://www.postgresql.org/) database to be
 
 This repo includes an `example.env` file that contains important environment variables for reference.  Make sure to create a `.env` file and include all variables found in the `example.env` file, replacing the example values with those specific to your environment/needs.
 
-To easily populate your database with the requisite tables, `npm run create-db`.  This will create tables in your database if they do not already exist.  The configuration for this script can be found in the  `setupDatabase.js` file located in the root of this project.
+To easily populate your database with the requisite tables, `npm run create-dbv2`.  This will create tables in your database if they do not already exist.  The configuration for this script can be found in the  `setupDatabaseV2.js` file located in the root of this project. Inorder to seed dummy values to the tables of the databse run `npm run seed-database`. The seeding values can be at `tables_v2_seed.js` located in the root of the project.
 
 Once the app is running locally, you can access the API at `http://localhost:<your-port>`
 

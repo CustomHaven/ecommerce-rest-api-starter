@@ -2,7 +2,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const AuthService = require('../services/AuthService');
 const AuthServiceInstance = new AuthService();
-const logger = require('../logger');
 
 module.exports = (app) => {
 
@@ -16,12 +15,9 @@ module.exports = (app) => {
     })
 
     // Set method to deserialize data stored in cookie and attach to req.user
-    passport.deserializeUser((id, done) => {
-        AuthServiceInstance.loginId({id}).then((user) => {
-            done(null, user);
-        }).catch((error) => {
-            console.log(`Error: ${error}`);
-        });
+    passport.deserializeUser(async (id, done) => {
+        const user = await AuthServiceInstance.loginId({id});
+        done(null, user);
     })
 
     // Configure local strategy to be use for local login
@@ -29,7 +25,7 @@ module.exports = (app) => {
         async (username, password, done) => {
             try {
                 const user = await AuthServiceInstance.localLogin({ email: username, password });
-
+                
                 if (user.message === 'Incorrect email.') {
                     return done(null, false, user.message)
                 } else if (user.message === 'Incorrect password.') {

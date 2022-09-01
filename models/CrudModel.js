@@ -4,6 +4,9 @@ const updateHelper = require('../helpers/updateHelper');
 const createHelper = require('../helpers/createHelper');
 const priceHelper = require('../helpers/priceHelper');
 const threeTableHelper = require('../helpers/threeTableHelper');
+const fkTableHelper = require("../helpers/fkTableHelper"); //
+const totalPriceQuantity = require("../helpers/priceQuantityHelper"); //
+const priceHelperV2 = require("../helpers/priceHelperv2"); //
 
 module.exports = class CrudModel {
     constructor(data = {}) {
@@ -11,23 +14,48 @@ module.exports = class CrudModel {
         this.count = data.count;
         this._date = moment().format("YYYY-MM-DD HH:mm:ss"); // 'NOW()'
     }
+
+    async tableSize(tableName) {
+        try {
+            const table = await db.query(`SELECT COUNT(*) FROM ${tableName}`);
+
+            if (table?.rows?.length) {
+                return table.rows[0];
+            }
+        } catch(err) {
+            throw err;
+        }
+    }
+
     async getAll(tableName) {
         try {
-            const result = await db.query(`SELECT * FROM ${tableName}`)
+            const result = await db.query(`SELECT * FROM ${tableName}`);
             if (result?.rows?.length) {
                 return result?.rows
             } 
             return null
         } catch(err) {
-            throw err
+            throw err;
         }
     }
     async findOne(id, tableName, idName) {
         try {
             const result = await db.query(`SELECT * FROM ${tableName} WHERE ${idName} = $1`, [id])
-
             if (result.rows?.length) {
-                return result.rows
+                return result.rows;
+            }
+          
+            return null;
+            
+        } catch(err) {
+            throw err
+        }
+    }
+    async findAll(id, tableName, idName) {
+        try {
+            const result = await db.query(`SELECT * FROM ${tableName} WHERE ${idName} = $1`, [id])
+            if (result.rows?.length) {
+                return result.rows;
             }
           
             return null;
@@ -242,6 +270,57 @@ module.exports = class CrudModel {
             return null;
         } catch(err) {
             throw err;
+        }
+    }
+
+
+    // two table joined but what will display is the child tables coloumns
+    async selectFromFkey(pkTableName, fkTableName, fkValue, pkCols, fkColName) {
+        try {
+            const sqlQuery = fkTableHelper(pkCols, pkTableName, fkTableName, fkColName);
+
+            const result = await db.query(sqlQuery, [fkValue]);
+
+            if (result?.rows?.length) {
+                return result?.rows;
+            }
+            return null;
+        } catch(err) {
+            throw new Error(err);
+        }
+    }
+
+    async selectPriceAndQuantity(table1, table2, table1Id, table2Id, table3Col, value, price, quantity) {
+        try {
+            const sqlQuery = totalPriceQuantity(table1, table2, table1Id, table2Id, table3Col, price, quantity);
+
+            const result = await db.query(sqlQuery, [value]);
+
+            if (result?.rows?.length) {
+                return result?.rows;
+            }
+            return null;
+
+            // return sqlQuery;
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+    async selectPriceV2(table1, table2, table1Id, table2Id, table3Col, value, price, quantity) {
+        try {
+            const sqlQuery = priceHelperV2(table1, table2, table1Id, table2Id, table3Col, price, quantity);
+
+            const result = await db.query(sqlQuery, [value]);
+
+            if (result?.rows?.length) {
+                return result?.rows;
+            }
+            return null;
+
+            // return sqlQuery;
+        } catch (error) {
+            throw new Error(error)
         }
     }
 }

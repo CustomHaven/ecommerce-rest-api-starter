@@ -1,3 +1,5 @@
+// DEPRECATED ROUTES
+
 const ordersRouter = require('express').Router();
 const path = require('path');
 const ejs = require('ejs');
