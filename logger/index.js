@@ -3,7 +3,7 @@ const buildProdLogger = require("./prod-logger");
 
 let logger = null;
 
-if (process.env.NODE_ENV = 'development') {
+if (process.env.NODE_ENV === 'development') {
     logger = buildDevLogger();
 } else {
     logger = buildProdLogger();
