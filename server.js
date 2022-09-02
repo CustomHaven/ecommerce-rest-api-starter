@@ -19,12 +19,6 @@ async function startServer () {
     // app.use(express.static(__dirname + '/public'));
     loaders(app);
 
-    console.log("process.env.NODE_ENV surely?");
-    console.log(process.env.NODE_ENV);
-    console.log("process.env.NODE_ENV surely?");
-
-
-
     app.listen(PORT, () => {
         if (process.env.NODE_ENV === "production") {
             logger.info(`Server is listening on port #${PORT}`);

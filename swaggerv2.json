@@ -1094,6 +1094,56 @@
         ]
       }
     },
+    "/v2/products/all/products": {
+      "summary": "Route to all products with all images",
+      "description": "The route to all the products showing all their images at the same time in the store",
+      "get": {
+        "summary": "Fetch all products and images",
+        "description": "Display all the products with banner image in the store",
+        "operationId": "all_products_with_images",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "[{ \"id\": \"prod 1\", \"source\": \"http://reference.com/sodales/scelerisque/mauris/sit/amet.html\", \"product_name\": \"Cake - Cheese Cake 9 Inch\", \"type\": \"Lettuce - Lambs Mash\", \"description\": \"Suspendisse potenti.\", \"price\": \"$7.68\", \"quantity\": 30, \"created\": \"11/09/2021\", \"modified\": \"21/03/2022\", \"product_images\": [\n  { \"id\": 1,\n    \"product_id\": \"prod 1\",\n    \"image_name\": \"NastyOldPeople\",\n    \"image_data\": \"http://dummyimage.com/165x100.png/5fa2dd/ffffff\",\n    \"created\": \"04/09/2021\",\n    \"modified\": \"10/11/2021\"}\n] }, { \"id\": \"prod 2\", \"source\": \"http://jigsy.com/ante/vel/ipsum/praesent.jsp\", \"product_name\": \"Oranges - Navel, 72\", \"type\": \"Mustard - Seed\", \"description\": \"Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\", \"price\": \"$9.06\", \"quantity\": 1, \"created\": \"08/11/2021\", \"modified\": \"03/04/2022\", \"product_images\": [{\n      \"id\": 2,\n      \"product_id\": \"prod 2\",\n      \"image_name\": \"Inheritance,The(Karami-ai)\",\n      \"image_data\": \"http://dummyimage.com/143x100.png/cc0000/ffffff\",\n      \"created\": \"06/11/2021\",\n      \"modified\": \"29/10/2021\"\n} ] }, { \"id\": \"prod 3\", \"source\": \"https://wikia.com/velit/nec/nisi.xml\", \"product_name\": \"Wine - Masi Valpolocell\", \"type\": \"Beans - Yellow\", \"description\": \"Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst.\", \"price\": \"$8.33\", \"quantity\": 43, \"created\": \"10/11/2021\", \"modified\": \"09/12/2021\", \"product_images\": [\n  {\n        \"id\": 3,\n        \"product_id\": \"prod 3\",\n        \"image_name\": \"Other SideofBollywood, The\",\n        \"image_data\": \"http://dummyimage.com/151x100.png/5fa2dd/ffffff\",\n        \"created\": \"25/08/2021\",\n        \"modified\": \"30/08/2021\"\n  }, {  \"id\": 11,\n      \"product_id\": \"prod 3\",\n      \"image_name\": \"Hardcover\",\n      \"image_data\": \"http://dummyimage.com/122x100.png/ff4444/ffffff\",\n      \"created\": \"14/10/2021\",\n      \"modified\": \"29/10/2021\"}, {\n            \"id\": 12,\n            \"product_id\": \"prod 3\",\n            \"image_name\": \"Rendezvous\",\n            \"image_data\": \"http://dummyimage.com/197x100.png/5fa2dd/ffffff\",\n            \"created\": \"21/10/2021\",\n            \"modified\": \"19/09/2021\"\n      }, {\n            \"id\": 13,\n            \"product_id\": \"prod 3\",\n            \"image_name\": \"King ofCalifornia\",\n            \"image_data\": \"http://dummyimage.com/187x100.png/5fa2dd/ffffff\",\n            \"created\": \"29/08/2021\",\n            \"modified\": \"27/09/2021\"\n      }\n] }, { \"id\": \"prod 4\", \"source\": \"http://blogger.com/arcu/adipiscing/molestie/hendrerit/at/vulputate/vitae.jsp?orci=sollicitudin\", \"product_name\": \"Mushroom - Shitake, Dry\", \"type\": \"Calypso - Black Cherry Lemonade\", \"description\": \"Praesent lectus. Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.\", \"price\": \"$2.14\", \"quantity\": 31, \"created\": \"25/08/2021\", \"modified\": \"17/05/2022\", \"product_images\": [\n  {    \"id\": 4,\n      \"product_id\": \"prod 4\",\n      \"image_name\": \"WutheringHeights\",\n      \"image_data\": \"http://dummyimage.com/107x100.png/dddddd/000000\",\n      \"created\": \"20/09/2021\",\n      \"modified\": \"23/09/2021\"}\n] }, \n{ \"id\": \"prod 5\", \"source\": \"http://hostgator.com/convallis/duis/consequat.json\", \"product_name\": \"Pomello\", \"type\": \"Truffle Paste\", \"description\": \"Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.\", \"price\": \"$2.67\", \"quantity\": 100, \"created\": \"21/10/2021\", \"modified\": \"18/11/2021\", \"product_images\": [\n  {\n    \"id\": 5,\n    \"product_id\": \"prod 5\",\n    \"image_name\": \"I Still Know WhatYouDid Last Summer\",\n    \"image_data\": \"http://dummyimage.com/216x100.png/cc0000/ffffff\",\n    \"created\": \"06/11/2021\",\n    \"modified\": \"29/08/2021\"\n  }\n] }, \n{ \"id\": \"prod 6\", \"source\": \"http://about.me/aliquam/lacus/morbi/quis/tortor/id.xml?vestibulum=sapien\", \"product_name\": \"Ice Cream - Chocolate\", \"type\": \"Capon - Breast, Double, Wing On\", \"description\": \"Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante.\", \"price\": \"$0.72\", \"quantity\": 90, \"created\": \"04/10/2021\", \"modified\": \"18/01/2022\", \"product_images\": [ {\n      \"id\": 6,\n      \"product_id\": \"prod 6\",\n      \"image_name\": \"Daylight\",\n      \"image_data\": \"http://dummyimage.com/218x100.png/5fa2dd/ffffff\",\n      \"created\": \"30/10/2021\",\n      \"modified\": \"24/08/2021\"\n} ] }, \n{ \"id\": \"prod 7\", \"source\": \"http://tamu.edu/nullam/orci/pede/venenatis/non.jpg?ante=vel&vestibulum=nisl\", \"product_name\": \"Salmon - Atlantic, Skin On\", \"type\": \"Broom And Broom Rack White\", \"description\": \"Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt.\", \"price\": \"$8.14\", \"quantity\": 65, \"created\": \"14/10/2021\", \"modified\": \"20/07/2022\", \"product_images\": [ {\n      \"id\": 7,\n      \"product_id\": \"prod 7\",\n      \"image_name\": \"Deep BlueSea\",\n      \"image_data\": \"http://dummyimage.com/162x100.png/dddddd/000000\",\n      \"created\": \"22/08/2021\",\n      \"modified\": \"08/11/2021\"\n}] },\n\n{ \"id\": \"prod 8\", \"source\": \"https://netvibes.com/in/congue/etiam/justo.xml?donec=porta&pharetra=volutpat\", \"product_name\": \"Bread - Roll, Calabrese\", \"type\": \"Chicken - Tenderloin\", \"description\": \"In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit.\", \"price\": \"$4.27\", \"quantity\": 15, \"created\": \"22/08/2021\", \"modified\": \"31/01/2022\", \"product_images\": [ {\n      \"id\": 8,\n      \"product_id\": \"prod 8\",\n      \"image_name\": \"Coup de grâce(DerFangschuß)\",\n      \"image_data\": \"http://dummyimage.com/132x100.png/dddddd/000000\",\n      \"created\": \"09/10/2021\",\n      \"modified\": \"17/09/2021\"\n}] },\n\n{ \"id\": \"prod 9\", \"source\": \"https://europa.eu/quis.js?sit=ac\", \"product_name\": \"Muffin Hinge 117n\", \"type\": \"Apron\", \"description\": \"Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\", \"price\": \"$5.87\", \"quantity\": 23, \"created\": \"25/09/2021\", \"modified\": \"24/01/2022\", \"product_images\": [ {\n      \"id\": 9,\n      \"product_id\": \"prod 9\",\n      \"image_name\": \"Going to KansasCity\",\n      \"image_data\": \"http://dummyimage.com/180x100.png/5fa2dd/ffffff\",\n      \"created\": \"12/11/2021\",\n      \"modified\": \"06/10/2021\"\n}] },\n\n{ \"id\": \"prod 10\", \"source\": \"http://scientificamerican.com/integer/ac/neque/duis.json?mauris=morbi\", \"product_name\": \"Bread - Pita, Mini\", \"type\": \"Dooleys Toffee\", \"description\": \"In eleifend quam a odio. In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum.\", \"price\": \"$2.01\", \"quantity\": 52, \"created\": \"22/08/2021\", \"modified\": \"07/12/2021\", \"product_images\": [ {\n      \"id\": 10,\n      \"product_id\": \"prod 10\",\n      \"image_name\": \"BarbarianQueen\",\n      \"image_data\": \"http://dummyimage.com/119x100.png/cc0000/ffffff\",\n      \"created\": \"11/11/2021\",\n      \"modified\": \"12/09/2021\"\n}] }]"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"No products\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      }
+    },
     "/v2/products/product-with-images": {
       "summary": "Route to facilitate to saving a product with images at hand",
       "description": "Special route that helps to save a product to the DB as well as at the same time save all the necessary images",

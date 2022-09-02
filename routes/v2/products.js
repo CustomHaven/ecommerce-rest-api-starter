@@ -111,6 +111,18 @@ module.exports = (app) => {
         };
         res.status(201).send(response);
     });
+
+    router.get("/all/products", async (req, res, next) => {
+        try {
+            const allProducts = await TableServiceInstance.allRows("products");
+            const everything = await Promise.all(allProducts.map(async (product) => ({
+                ...product, product_images: await TableServiceInstance.findAllBasedOnFkey(product.id, "product_images", "product_id")
+            })));
+            res.status(200).send(everything);
+        } catch (error) {
+            next(error);
+        }
+    });
 };
 
 /*
