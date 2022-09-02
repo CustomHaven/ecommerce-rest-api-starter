@@ -1094,6 +1094,72 @@
         ]
       }
     },
+    "/v2/products/product-with-images": {
+      "summary": "Route to facilitate to saving a product with images at hand",
+      "description": "Special route that helps to save a product to the DB as well as at the same time save all the necessary images",
+      "post": {
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Save new product and images at the same time",
+        "description": "Save a new product to the store along with any relevant images",
+        "operationId": "new_product_and_images",
+        "requestBody": {
+          "description": "Sign up a new user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product-And-Images-Completed"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": "{\"product\": { \"id\": \"prod 3\", \"source\": \"https://wikia.com/velit/nec/nisi.xml\", \"product_name\": \"Wine - Masi Valpolocell\", \"type\": \"Beans - Yellow\", \"description\": \"Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst.\", \"price\": \"$8.33\", \"quantity\": 43, \"created\": \"10/11/2021\", \"modified\": \"09/12/2021\" },\"product_images\": [{ \"id\":3,\"product_id\": \"prod 3\", \"image_name\": \"Other SideofBollywood, The\",\"image_data\":\"http://dummyimage.com/151x100.png/5fa2dd/ffffff\",\"created\":\"25/08/2021\", \"modified\": \"30/08/2021\"},{\"id\":11,\"product_id\":\"prod 3\",\"image_name\":\"Hardcover\",\"image_data\":\"http://dummyimage.com/122x100.png/ff4444/ffffff\",\"created\":\"14/10/2021\",\"modified\":\"29/10/2021\"},{\"id\":12,\"product_id\":\"prod 3\",\"image_name\":\"Rendezvous\",\"image_data\":\"http://dummyimage.com/197x100.png/5fa2dd/ffffff\",\"created\":\"21/10/2021\",\"modified\":\"19/09/2021\"},{\"id\":13,\"product_id\":\"prod 3\",\"image_name\":\"King ofCalifornia\",\"image_data\":\"http://dummyimage.com/187x100.png/5fa2dd/ffffff\",\"created\":\"29/08/2021\",\"modified\":\"27/09/2021\"}]}"
+                  }
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\"message\": \"Unathorized\"}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": "{\n  \"message\": \"Invalid Server Error\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "Fail"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      }
+    },
     "/v2/product-images/{product_id}": {
       "summary": "A product's all images",
       "description": "List all Images that belong to a particular product",
@@ -3246,6 +3312,23 @@
         },
         "xml": {
           "name": "Product-Images"
+        }
+      },
+      "Product-And-Images-Completed": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "$ref": "#/components/schemas/Products"
+          },
+          "product_images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product-Image"
+            }
+          }
+        },
+        "xml": {
+          "name": "Product-And-Images-Completed"
         }
       },
       "Cart": {

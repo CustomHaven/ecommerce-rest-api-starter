@@ -14,4 +14,12 @@ const fkTableHelper = (col, PKTable, FKTable, FKColName) => {
     return query.join('');
 };
 
+`
+SELECT pi.id, pi.product_id, pi.image_name, pi.image_data, pi.created, pi.modified
+FROM product_images AS pi
+JOIN products as p
+ON pi.product_id = p.id
+WHERE p.id = 'prod 2';
+`
+
 module.exports = fkTableHelper;

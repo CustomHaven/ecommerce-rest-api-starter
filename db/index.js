@@ -18,7 +18,7 @@ const proConfig = {
 }
 
 
-const pool = new Pool(process.env.NODE_ENV !== "development" ? proConfig : devConfig);
+const pool = new Pool(process.env.NODE_ENV === "production" ? proConfig : devConfig);
 // pool
 // .connect()
 // .then(() => console.log("connected to database"))

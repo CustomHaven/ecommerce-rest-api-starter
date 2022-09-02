@@ -65,7 +65,7 @@ module.exports = (app) => {
     
     router.post("/:user_id", authenticationMiddleware, async (req, res, next) => { // call it something backend /backend/:user_id
         try {
-            const { name_on_card, card_type, card_number, expiry_date, cvv } = req.body;
+            const { name_on_card, card_type, card_number, expiry_date, cvv, amount } = req.body;
 
 
             // I am trying to rob someone lol with this code
@@ -101,7 +101,7 @@ module.exports = (app) => {
 // 4000008260003178 // Insufficient funds credit card
 
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: 2000,
+                amount: amount,
                 currency: "usd",
                 customer: customer.id,
                 payment_method: paymentMethod.id

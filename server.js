@@ -26,10 +26,10 @@ async function startServer () {
 
 
     app.listen(PORT, () => {
-        if (process.env.NODE_ENV === "development") {
-            logger.info(`Server is listening on port #${process.env.localhost}:${PORT}`);
-        } else {
+        if (process.env.NODE_ENV === "production") {
             logger.info(`Server is listening on port #${PORT}`);
+        } else {
+            logger.info(`Server is listening on port #${process.env.localhost}:${PORT}`);
         }
     });
 }
